@@ -26,11 +26,27 @@ public class ObjectManager : MonoBehaviour
 
     void spawnTiles()
     {
-        for (int i = 1; i < numTileRows + 1; i++)
+        // ZONE: regular tiles
+        object[] defaultTileData = new object[1]; // lets the tiles know they are regular tiles
+        defaultTileData[0] = false;
+
+        for (int i = 0; i < numTileRows; i++)
         {
             for (int j = 0; j < tilesPerRow; j++)
             {
-                PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "TilePrefab"), new Vector3(j * 3, 0, i * 5), Quaternion.identity);
+                PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "TilePrefab"), new Vector3(j * 3, 0, i * 5 + 8), Quaternion.identity, 0, defaultTileData);
+            }
+        }
+
+        // ZONE: instant-death tiles
+        object[] deathTileData = new object[1]; // lets the tiles know they are instant death tiles
+        deathTileData[0] = true;
+
+        for (int i = numTileRows; i < numTileRows * 2; i++)
+        {
+            for (int j = 0; j < tilesPerRow; j++)
+            {
+                PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "InstaDeathTilePrefab"), new Vector3(j * 3, 0, i * 5 + 8), Quaternion.identity, 0, deathTileData);
             }
         }
     }
