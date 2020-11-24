@@ -18,11 +18,7 @@ public class ObjectManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (!PV.IsMine)
-        {
-            return;
-        }
-        if (PV.Owner.IsMasterClient)
+        if (PV.IsMine && PV.Owner.IsMasterClient)
         {
             spawnTiles();
         }
@@ -38,7 +34,7 @@ public class ObjectManager : MonoBehaviour
         {
             for (int j = 0; j < tilesPerRow; j++)
             {
-                PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "TilePrefab"), new Vector3(j * 3, 0, i * 5 + 8), Quaternion.identity, 0, defaultTileData);
+                PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "TilePrefab"), new Vector3(j * 4, 0, i * 5 + 8), Quaternion.identity, 0, defaultTileData);
             }
         }
 
@@ -50,7 +46,7 @@ public class ObjectManager : MonoBehaviour
         {
             for (int j = 0; j < tilesPerRow; j++)
             {
-                PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "InstaDeathTilePrefab"), new Vector3(j * 3, 0, i * 5 + 8), Quaternion.identity, 0, deathTileData);
+                PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "InstaDeathTilePrefab"), new Vector3(j * 4, 0, i * 5 + 8), Quaternion.identity, 0, deathTileData);
             }
         }
     }

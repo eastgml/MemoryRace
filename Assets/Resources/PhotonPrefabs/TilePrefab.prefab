@@ -109,6 +109,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mesh: {fileID: 9170249981707990765}
   isBad: 0
+  isMelting: 0
+  isRegenerating: 0
   badTileMat: {fileID: 2100000, guid: 9390177c600caca42ad00bf024d1a4b7, type: 2}
   originalMat: {fileID: 2100000, guid: 6ebf5d4d8a12c4b468ae22de4bd14f7a, type: 2}
 --- !u!114 &-8528352964843077347

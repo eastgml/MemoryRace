@@ -24,6 +24,11 @@ public class Tile : MonoBehaviour, IPunObservable
     void Start()
     {
         PV = GetComponent<PhotonView>();
+        if (!PV.IsMine)
+        {
+            return;
+        }
+
         object[] tileTypeData = PV.InstantiationData;
 
         // decide if it's bad in the first place
