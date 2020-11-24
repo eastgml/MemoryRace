@@ -68,8 +68,10 @@ public class PlayerController : MonoBehaviour
         if (collider.CompareTag("Tile"))
         {
             Tile tile = collider.gameObject.GetComponent<Tile>();
-
-            tile.onStepped();
+            if (!tile.isMelting && !tile.isRegenerating)
+            {
+                tile.onStepped();
+            }
         }
     }
 

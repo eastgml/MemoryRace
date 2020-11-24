@@ -13,9 +13,9 @@ public class Tile : MonoBehaviour, IPunObservable
 
     private float meltPeriod; // time it takes to melt once stepped on
     private float meltTimer; // timer that tracks how far tile is in melt period
-    private bool isMelting; // true if tile is currently melting
+    public bool isMelting; // true if tile is currently melting
     private float regenTimer; // after melting, time before it regenerates
-    private bool isRegenerating; // true if tile is currently waiting to reappear
+    public bool isRegenerating; // true if tile is currently waiting to reappear
 
     public Material badTileMat;
     public Material originalMat;
@@ -125,7 +125,7 @@ public class Tile : MonoBehaviour, IPunObservable
     {
         mesh.enabled = active;
         gameObject.GetComponent<BoxCollider>().enabled = active;
-        gameObject.GetComponent<BoxCollider>().isTrigger = active;
+        //gameObject.GetComponent<BoxCollider>().isTrigger = active;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
