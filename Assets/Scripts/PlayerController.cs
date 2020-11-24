@@ -14,19 +14,23 @@ public class PlayerController : MonoBehaviour
     Vector3 moveAmount;
     PhotonView PV;
 
-    void Awake() {
+    void Awake()
+    {
         rb = GetComponent<Rigidbody>();
         PV = GetComponent<PhotonView>();
     }
 
-    void Start() {
-        if (!PV.IsMine) {
+    void Start()
+    {
+        if (!PV.IsMine)
+        {
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
         }
     }
 
-    void Update() {
+    void Update()
+    {
         if (!PV.IsMine)
         {
             return;
@@ -35,26 +39,59 @@ public class PlayerController : MonoBehaviour
         Look();
         Move();
         Jump();
+        
+        // respawn if player falls off
+        if (transform.position.y < -10)
+        {
+            if (PV.Owner.IsMasterClient)
+            {
+                transform.position = new Vector3(5, 0, 0);
+            }
+            else
+            {
+                transform.position = new Vector3(25, 0, 0);
+
+            }
+        }
     }
 
 
-    void Move() {
+    void Move()
+    {
         Vector3 moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
         moveAmount = Vector3.SmoothDamp(moveAmount, moveDir * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed), ref smoothMoveVelocity, smoothTime);
     }
 
-    void Jump() {
+    void Jump()
+    {
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
             rb.AddForce(transform.up * jumpForce);
         }
     }
 
-    public void SetGroundedState(bool _grounded) {
+    public void SetGroundedState(bool _grounded)
+    {
         grounded = _grounded;
     }
 
-    void Look() {
+    void OnCollisionEnter(Collision collision)
+    {
+        Collider collider = collision.collider;
+
+        if (collider.CompareTag("Tile"))
+        {
+            Tile tile = collider.gameObject.GetComponent<Tile>();
+            if (!tile.isMelting)
+            {
+                tile.onStepped();
+            }
+        }
+    }
+
+
+    void Look()
+    {
         transform.Rotate(Vector3.up * Input.GetAxisRaw("Mouse X") * mouseSensitivity);
 
         verticalLookRotation += Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
@@ -62,8 +99,10 @@ public class PlayerController : MonoBehaviour
         cameraHolder.transform.localEulerAngles = Vector3.left * verticalLookRotation;
     }
 
-    void FixedUpdate() {
-        if (!PV.IsMine) {
+    void FixedUpdate()
+    {
+        if (!PV.IsMine)
+        {
             return;
         }
 
