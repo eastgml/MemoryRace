@@ -7,6 +7,8 @@ public class Tile : MonoBehaviour, IPunObservable
 {
     PhotonView PV;
 
+    public MeshRenderer mesh;
+
     private float meltTimer; // time it takes to melt once stepped on
     private bool isMelting; // true if tile is currently melting
     private float regenTimer; // after melting, time before it regenerates
@@ -41,8 +43,8 @@ public class Tile : MonoBehaviour, IPunObservable
         {
             isMelting = false;
             meltTimer = 3.0f;
-            //gameObject.SetActive(false);
             PV.RPC("setTileActive", RpcTarget.All, false);
+            isRegenerating = true;
         }
 
         // tile has finishsed waiting to regenerate, so it reappears
@@ -50,7 +52,6 @@ public class Tile : MonoBehaviour, IPunObservable
         {
             isRegenerating = false;
             regenTimer = 1.0f;
-            //gameObject.SetActive(true);
             PV.RPC("setTileActive", RpcTarget.All, true);
 
         }
@@ -65,19 +66,20 @@ public class Tile : MonoBehaviour, IPunObservable
     [PunRPC]
     private void setTileActive(bool active)
     {
-        gameObject.SetActive(active);
+        mesh.enabled = active;
+        gameObject.GetComponent<BoxCollider>().enabled = active;
+        gameObject.GetComponent<BoxCollider>().isTrigger = active;
+        //gameObject.SetActive(active);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
         {
-            //Debug.Log("tile is writing");
             //stream.SendNext(gameObject.activeSelf);
         }
         else
         {
-            //Debug.Log("tile is reading");
             //gameObject.SetActive((bool)stream.ReceiveNext());
         }
     }

@@ -20,7 +20,6 @@ public class ObjectManager : MonoBehaviour
     {
         if (PV.Owner.IsMasterClient)
         {
-            Debug.Log("should only spawn tiles once");
             spawnTiles();
         }
     }
