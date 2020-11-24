@@ -39,6 +39,19 @@ public class PlayerController : MonoBehaviour
         Look();
         Move();
         Jump();
+
+        if (transform.position.y < -15)
+        {
+            if (PV.Owner.IsMasterClient)
+            {
+                transform.position = new Vector3(5, 0, 0);
+            }
+            else
+            {
+                transform.position = new Vector3(25, 0, 0);
+
+            }
+        }
     }
 
 

@@ -84,7 +84,6 @@ public class Tile : MonoBehaviour, IPunObservable
             // tile has melted, so it falls through
             if (isMelting && meltTimer <= 0)
             {
-                Debug.Log("reached");
                 isMelting = false;
                 meltTimer = meltPeriod;
                 PV.RPC("setTileActive", RpcTarget.All, false);
