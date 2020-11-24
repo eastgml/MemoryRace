@@ -17,6 +17,8 @@ public class Tile : MonoBehaviour, IPunObservable
     private float regenTimer; // after melting, time before it regenerates
     private bool isRegenerating; // true if tile is currently waiting to reappear
 
+    public Material badTileMat;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,9 +27,13 @@ public class Tile : MonoBehaviour, IPunObservable
 
         // decide if it's bad in the first place
         float rand = Random.Range(0.0f, 10.0f);
-        if (rand < 2.0f)
+        if (rand < 4.0f)
         {
             isBad = true;
+
+            //                   JUST FOR TESTING PURPOSES
+            //                   BAD TILES WILL CHANGE COLORS
+            mesh.GetComponent<MeshRenderer>().material = badTileMat;
         }
         else
         {
@@ -67,8 +73,9 @@ public class Tile : MonoBehaviour, IPunObservable
             }
 
             // tile has melted, so it falls through
-            if (meltTimer <= 0)
+            if (isMelting && meltTimer <= 0)
             {
+                Debug.Log("reached");
                 isMelting = false;
                 meltTimer = meltPeriod;
                 PV.RPC("setTileActive", RpcTarget.All, false);
@@ -76,7 +83,7 @@ public class Tile : MonoBehaviour, IPunObservable
             }
 
             // tile has finishsed waiting to regenerate, so it reappears
-            if (regenTimer <= 0)
+            if (isRegenerating && regenTimer <= 0)
             {
                 isRegenerating = false;
                 regenTimer = 3.0f;
@@ -101,7 +108,6 @@ public class Tile : MonoBehaviour, IPunObservable
         mesh.enabled = active;
         gameObject.GetComponent<BoxCollider>().enabled = active;
         gameObject.GetComponent<BoxCollider>().isTrigger = active;
-        //gameObject.SetActive(active);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
