@@ -17,8 +17,8 @@ public class Tile : MonoBehaviour, IPunObservable
     private float regenTimer; // after melting, time before it regenerates
     public bool isRegenerating; // true if tile is currently waiting to reappear
 
-    public Material badTileMat;
-    public Material originalMat;
+    public Material badTileMat; // just for testing purposes
+    public Material originalMat; // just for testing purposes
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +31,7 @@ public class Tile : MonoBehaviour, IPunObservable
 
         object[] tileTypeData = PV.InstantiationData;
 
-        // decide if it's bad in the first place
+        // tiles have 0.4 chance to be bad tiles
         float rand = Random.Range(0.0f, 10.0f);
         if (rand < 4.0f)
         {
@@ -39,12 +39,12 @@ public class Tile : MonoBehaviour, IPunObservable
 
             if ((bool)tileTypeData[0])
             {
-                // if tile is an instant death tile, it melts in 0 seconds
+                // if bad tile is an instant death tile, it melts in 0 seconds
                 meltPeriod = 0.0f;
             }
             else
             {
-                // tile takes anywhere from 0.5 to 3.0 seconds to melt
+                // otherwise bad tile takes anywhere from 0.5 to 3.0 seconds to melt
                 meltPeriod = Random.Range(0.5f, 3.0f);
             }
 
@@ -56,7 +56,7 @@ public class Tile : MonoBehaviour, IPunObservable
             PV.RPC("setTileInfo", RpcTarget.All, false, 0.0f);
         }
 
-        meltTimer = meltPeriod;
+        //meltTimer = meltPeriod;
         regenTimer = 3.0f;
         isMelting = false;
         isRegenerating = false;
@@ -67,8 +67,8 @@ public class Tile : MonoBehaviour, IPunObservable
     {
         if (isBad)
         {
-            //                   JUST FOR TESTING PURPOSES
-            //                   BAD TILES WILL CHANGE COLORS
+            //         JUST FOR TESTING PURPOSES BAD TILES WILL SHOW UP RED
+            //         comment the line below out if you don't want them to be distinguishable
             mesh.GetComponent<MeshRenderer>().material = badTileMat;
 
             if (isMelting)
@@ -101,8 +101,8 @@ public class Tile : MonoBehaviour, IPunObservable
         }
         else
         {
-            //                   JUST FOR TESTING PURPOSES
-            //                   BAD TILES WILL CHANGE COLORS
+            //       JUST FOR TESTING PURPOSES BAD TILES WILL SHOW UP RED
+            //       comment the line below out if you don't want them to be distinguishable
             mesh.GetComponent<MeshRenderer>().material = originalMat;
         }
     }
@@ -113,6 +113,7 @@ public class Tile : MonoBehaviour, IPunObservable
         if (isBad)
         {
             isMelting = true;
+            regenTimer = 3.0f;
         }
     }
 
@@ -129,7 +130,6 @@ public class Tile : MonoBehaviour, IPunObservable
     {
         mesh.enabled = active;
         gameObject.GetComponent<BoxCollider>().enabled = active;
-        //gameObject.GetComponent<BoxCollider>().isTrigger = active;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

@@ -39,8 +39,9 @@ public class PlayerController : MonoBehaviour
         Look();
         Move();
         Jump();
-
-        if (transform.position.y < -15)
+        
+        // respawn if player falls off
+        if (transform.position.y < -10)
         {
             if (PV.Owner.IsMasterClient)
             {
@@ -81,7 +82,7 @@ public class PlayerController : MonoBehaviour
         if (collider.CompareTag("Tile"))
         {
             Tile tile = collider.gameObject.GetComponent<Tile>();
-            if (!tile.isMelting && !tile.isRegenerating)
+            if (!tile.isMelting)
             {
                 tile.onStepped();
             }
