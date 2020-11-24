@@ -5,6 +5,8 @@ using Photon.Pun;
 
 public class Tile : MonoBehaviour, IPunObservable
 {
+    PhotonView PV;
+
     private float meltTimer; // time it takes to melt once stepped on
     private bool isMelting; // true if tile is currently melting
     private float regenTimer; // after melting, time before it regenerates
@@ -13,6 +15,8 @@ public class Tile : MonoBehaviour, IPunObservable
     // Start is called before the first frame update
     void Start()
     {
+        PV = GetComponent<PhotonView>();
+
         meltTimer = 3.0f;
         regenTimer = 1.0f;
         isMelting = false;
@@ -37,7 +41,8 @@ public class Tile : MonoBehaviour, IPunObservable
         {
             isMelting = false;
             meltTimer = 3.0f;
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
+            PV.RPC("setTileActive", RpcTarget.All, false);
         }
 
         // tile has finishsed waiting to regenerate, so it reappears
@@ -45,7 +50,9 @@ public class Tile : MonoBehaviour, IPunObservable
         {
             isRegenerating = false;
             regenTimer = 1.0f;
-            gameObject.SetActive(true);
+            //gameObject.SetActive(true);
+            PV.RPC("setTileActive", RpcTarget.All, true);
+
         }
     }
 
@@ -55,17 +62,23 @@ public class Tile : MonoBehaviour, IPunObservable
         isMelting = true;
     }
 
+    [PunRPC]
+    private void setTileActive(bool active)
+    {
+        gameObject.SetActive(active);
+    }
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
         {
-            Debug.Log("tile is writing");
-            stream.SendNext(gameObject.activeSelf);
+            //Debug.Log("tile is writing");
+            //stream.SendNext(gameObject.activeSelf);
         }
         else
         {
-            Debug.Log("tile is reading");
-            gameObject.SetActive((bool)stream.ReceiveNext());
+            //Debug.Log("tile is reading");
+            //gameObject.SetActive((bool)stream.ReceiveNext());
         }
     }
 }
