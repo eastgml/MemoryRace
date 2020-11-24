@@ -18,6 +18,7 @@ public class Tile : MonoBehaviour, IPunObservable
     private bool isRegenerating; // true if tile is currently waiting to reappear
 
     public Material badTileMat;
+    public Material originalMat;
 
     // Start is called before the first frame update
     void Start()
@@ -31,24 +32,23 @@ public class Tile : MonoBehaviour, IPunObservable
         {
             isBad = true;
 
-            //                   JUST FOR TESTING PURPOSES
-            //                   BAD TILES WILL CHANGE COLORS
-            mesh.GetComponent<MeshRenderer>().material = badTileMat;
+            if ((bool)tileTypeData[0])
+            {
+                // if tile is an instant death tile, it melts in 0 seconds
+                meltPeriod = 0.0f;
+            }
+            else
+            {
+                // tile takes anywhere from 0.5 to 3.0 seconds to melt
+                meltPeriod = Random.Range(0.5f, 3.0f);
+            }
+
+            PV.RPC("setTileInfo", RpcTarget.All, true, meltPeriod);
         }
         else
         {
             isBad = false;
-        }
-
-        if ((bool) tileTypeData[0])
-        {
-            // if tile is an instant death tile, it melts in 0 seconds
-            meltPeriod = 0.0f;
-        }
-        else
-        {
-            // tile takes anywhere from 0.5 to 3.0 seconds to melt
-            meltPeriod = Random.Range(0.5f, 3.0f);
+            PV.RPC("setTileInfo", RpcTarget.All, false, 0.0f);
         }
 
         meltTimer = meltPeriod;
@@ -62,6 +62,10 @@ public class Tile : MonoBehaviour, IPunObservable
     {
         if (isBad)
         {
+            //                   JUST FOR TESTING PURPOSES
+            //                   BAD TILES WILL CHANGE COLORS
+            mesh.GetComponent<MeshRenderer>().material = badTileMat;
+
             if (isMelting)
             {
                 meltTimer -= Time.deltaTime;
@@ -91,6 +95,12 @@ public class Tile : MonoBehaviour, IPunObservable
 
             }
         }
+        else
+        {
+            //                   JUST FOR TESTING PURPOSES
+            //                   BAD TILES WILL CHANGE COLORS
+            mesh.GetComponent<MeshRenderer>().material = originalMat;
+        }
     }
 
     // execute when a player steps on it
@@ -100,6 +110,14 @@ public class Tile : MonoBehaviour, IPunObservable
         {
             isMelting = true;
         }
+    }
+
+    [PunRPC]
+    private void setTileInfo(bool isBadTile, float meltTime)
+    {
+        isBad = isBadTile;
+        meltPeriod = meltTime;
+        meltTimer = meltPeriod;
     }
 
     [PunRPC]

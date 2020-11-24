@@ -18,6 +18,10 @@ public class ObjectManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (!PV.IsMine)
+        {
+            return;
+        }
         if (PV.Owner.IsMasterClient)
         {
             spawnTiles();
