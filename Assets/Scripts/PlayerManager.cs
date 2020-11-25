@@ -23,13 +23,14 @@ public class PlayerManager : MonoBehaviour
         // spawn player one here
         if (PV.Owner.IsMasterClient)
         {
-            PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), new Vector3(5, 0, 0), Quaternion.identity);
+            GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), new Vector3(5, 0, 0), Quaternion.identity);
+            go.GetComponent<PlayerController>().color = new Color(1, 0, 0);
         }
         // spawn player two here
         else
         {
-            PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), new Vector3(25, 0, 0), Quaternion.identity);
-
+            GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), new Vector3(25, 0, 0), Quaternion.identity);
+            go.GetComponent<PlayerController>().color = new Color(0, 0, 1);
         }
     }
 }
