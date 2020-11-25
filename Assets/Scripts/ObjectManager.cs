@@ -37,7 +37,11 @@ public class ObjectManager : MonoBehaviour
             for (int j = 0; j < tilesPerRow; j++)
             {
                 PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "TilePrefab"), new Vector3(j * 4, 0, i * 5 + 8), Quaternion.identity, 0, defaultTileData);
-                PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ClockItemPrefab"), new Vector3(j * 4, 1, i * 5 + 8), Quaternion.identity, 0);
+                // Randomly generate clock items
+                if (Random.Range(0, 1f) < 0.2)
+                {
+                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ClockItemPrefab"), new Vector3(j * 4, 1, i * 5 + 8), Quaternion.identity, 0);
+                }
             }
         }
 
@@ -50,6 +54,10 @@ public class ObjectManager : MonoBehaviour
             for (int j = 0; j < tilesPerRow; j++)
             {
                 PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "InstaDeathTilePrefab"), new Vector3(j * 4, 0, i * 5 + 8), Quaternion.identity, 0, deathTileData);
+                if (Random.Range(0, 1f) < 0.2)
+                {
+                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ClockItemPrefab"), new Vector3(j * 4, 1, i * 5 + 8), Quaternion.identity, 0);
+                }
             }
         }
     }

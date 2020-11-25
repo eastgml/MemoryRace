@@ -12,7 +12,7 @@ public class Tile : MonoBehaviour, IPunObservable
     public bool isBad; // true if tile is a bad tile
 
     private float meltPeriod; // time it takes to melt once stepped on
-    private float meltTimer; // timer that tracks how far tile is in melt period
+    public float meltTimer; // timer that tracks how far tile is in melt period
     public bool isMelting; // true if tile is currently melting
     private float regenTimer; // after melting, time before it regenerates
     public bool isRegenerating; // true if tile is currently waiting to reappear
