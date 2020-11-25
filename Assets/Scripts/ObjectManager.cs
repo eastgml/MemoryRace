@@ -30,12 +30,14 @@ public class ObjectManager : MonoBehaviour
         // ZONE: regular tiles
         object[] defaultTileData = new object[1]; // lets the tiles know they are regular tiles
         defaultTileData[0] = false;
+        
 
         for (int i = 0; i < numTileRows; i++)
         {
             for (int j = 0; j < tilesPerRow; j++)
             {
                 PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "TilePrefab"), new Vector3(j * 4, 0, i * 5 + 8), Quaternion.identity, 0, defaultTileData);
+                PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ClockItemPrefab"), new Vector3(j * 4, 1, i * 5 + 8), Quaternion.identity, 0);
             }
         }
 

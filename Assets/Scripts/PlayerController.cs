@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Photon.Pun;
 
 public class PlayerController : MonoBehaviour
@@ -13,6 +14,8 @@ public class PlayerController : MonoBehaviour
     Vector3 smoothMoveVelocity;
     Vector3 moveAmount;
     PhotonView PV;
+    int numClockItems = 0;
+    public Text clockItemText;
 
     void Awake()
     {
@@ -27,6 +30,7 @@ public class PlayerController : MonoBehaviour
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
         }
+
     }
 
     void Update()
@@ -86,6 +90,10 @@ public class PlayerController : MonoBehaviour
             {
                 tile.onStepped();
             }
+        } else if(collider.CompareTag("ClockItem"))
+        {
+            numClockItems += 1;
+            Destroy(collider.gameObject);
         }
     }
 
@@ -105,8 +113,20 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
+
+        clockItemText.text = "Clock items: " + numClockItems;
     }
 
+    public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(numClockItems);
+        }
+        else if (stream.IsReading)
+        {
+            numClockItems = (int) stream.ReceiveNext();
+        }
+    }
 }
