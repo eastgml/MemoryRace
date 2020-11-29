@@ -40,7 +40,7 @@ public class ObjectManager : MonoBehaviour
                 // Randomly generate clock items
                 if (Random.Range(0, 1f) < 0.2)
                 {
-                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ClockItemPrefab"), new Vector3(j * 4, 1, i * 5 + 8), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ClockItemPrefab"), new Vector3(j * 4, 1, i * 5 + 8), Quaternion.Euler(0,180f,0), 0);
                 }
             }
         }
@@ -56,7 +56,7 @@ public class ObjectManager : MonoBehaviour
                 PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "InstaDeathTilePrefab"), new Vector3(j * 4, 0, i * 5 + 8), Quaternion.identity, 0, deathTileData);
                 if (Random.Range(0, 1f) < 0.2)
                 {
-                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ClockItemPrefab"), new Vector3(j * 4, 1, i * 5 + 8), Quaternion.identity, 0);
+                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ClockItemPrefab"), new Vector3(j * 4, 1, i * 5 + 8), Quaternion.Euler(0,180f,0), 0);
                 }
             }
         }

@@ -17,10 +17,13 @@ public class PlayerController : MonoBehaviour
     PhotonView PV;
     int numClockItems = 0;
     public Text clockItemText;
-    int numPublicMakers = 5;
-    public Text publicMarkertText;
-    public Color color;
-    
+    int numPublicMarkers = 5;
+    public Text publicMarkerText;
+    public Color publicMarkerColor;
+    int numPrivateMarkers = 5;
+    public Text privateMarkerText;
+    public Color privateMarkerColor;
+    public GameObject privateMarkerPrefab;
 
     void Awake()
     {
@@ -34,9 +37,7 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
-            // color = new Color(0, 0, 1f);
         } else {
-            // color = new Color(1f, 0, 0);
         }
 
     }
@@ -54,6 +55,8 @@ public class PlayerController : MonoBehaviour
         UseClockItem();
         PlacePublicMarker();
         PickUpPublicMarker();
+        PlacePrivateMarker();
+        PickUpPrivateMarker();
         
         // respawn if player falls off
         if (transform.position.y < -10)
@@ -104,25 +107,50 @@ public class PlayerController : MonoBehaviour
 
     void PlacePublicMarker()
     {
-        if (Input.GetKeyDown(KeyCode.K) && numPublicMakers > 0)
+        if (Input.GetKeyDown(KeyCode.K) && numPublicMarkers > 0)
         {
-            numPublicMakers -= 1;
+            numPublicMarkers -= 1;
 
             GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PublicMarkerPrefab"), transform.position - new Vector3(0, 0.8f, 0), Quaternion.identity, 0);
-            go.GetComponent<MeshRenderer>().material.SetColor("_Color",color);
+            go.GetComponent<MeshRenderer>().material.SetColor("_Color", publicMarkerColor);
 
+        }
+    }
+
+    void PlacePrivateMarker()
+    {
+        if (Input.GetKeyDown(KeyCode.I) && numPrivateMarkers > 0)
+        {
+            numPrivateMarkers -= 1;
+            // GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PublicMarkerPrefab"), transform.position - new Vector3(0, 0.8f, 0), Quaternion.identity, 0);
+            // go.GetComponent<MeshRenderer>().material.SetColor("_Color",publicMarkerColor);   
+            GameObject go = Instantiate(privateMarkerPrefab, transform.position - new Vector3(0, 0.7f, 0), Quaternion.identity);
+            go.GetComponent<MeshRenderer>().material.SetColor("_Color", privateMarkerColor);
         }
     }
 
     void PickUpPublicMarker()   
     {
-        if (Input.GetKeyDown(KeyCode.J) && numPublicMakers < 5)
+        if (Input.GetKeyDown(KeyCode.J) && numPublicMarkers < 5)
         {
             GameObject go = FindClosestPublicMarker();
             if (go != null)
             {
                 PhotonNetwork.Destroy(go);
-                numPublicMakers += 1;
+                numPublicMarkers += 1;
+            }
+        }
+    }
+
+    void PickUpPrivateMarker()
+    {
+        if (Input.GetKeyDown(KeyCode.U) && numPrivateMarkers < 5)
+        {
+            GameObject go = FindclosestPrivateMarker();
+            if (go != null)
+            {
+                Destroy(go);
+                numPrivateMarkers += 1;
             }
         }
     }
@@ -166,7 +194,8 @@ public class PlayerController : MonoBehaviour
             rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
         }
         clockItemText.text = "Clock Items: " + numClockItems;
-        publicMarkertText.text = "Public Markers: " + numPublicMakers;
+        publicMarkerText.text = "Public Markers: " + numPublicMarkers;
+        privateMarkerText.text = "Private Markers: " + numPrivateMarkers;
     }
 
     public GameObject FindClosestTile()
@@ -220,17 +249,44 @@ public class PlayerController : MonoBehaviour
         return closest;
     }
 
+    public GameObject FindclosestPrivateMarker()
+    {
+        GameObject[] gos;
+        gos = GameObject.FindGameObjectsWithTag("PrivateMarker");
+        GameObject closest = null;
+        float distance = Mathf.Infinity;
+        Vector3 position = transform.position;
+        foreach (GameObject go in gos)
+        {
+            PublicMarker pm = go.GetComponent<PublicMarker>();
+            Vector3 diff = go.transform.position - position;
+            float curDistance = diff.sqrMagnitude;
+            if (curDistance < distance)
+            {
+                closest = go;
+                distance = curDistance;
+            }
+            
+        }
+
+        if (distance > 5f) {
+            return null;
+        }
+
+        return closest;
+    }
+
     public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
         {
             stream.SendNext(numClockItems);
-            stream.SendNext(numPublicMakers);
+            stream.SendNext(numPublicMarkers);
         }
         else if (stream.IsReading)
         {
             numClockItems = (int) stream.ReceiveNext();
-            numPublicMakers = (int) stream.ReceiveNext();
+            numPublicMarkers = (int) stream.ReceiveNext();
         }
     }
 }
