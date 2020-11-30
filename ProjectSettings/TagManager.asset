@@ -8,6 +8,7 @@ TagManager:
   - ClockItem
   - PublicMarker
   - PrivateMarker
+  - TileChecker
   layers:
   - Default
   - TransparentFX

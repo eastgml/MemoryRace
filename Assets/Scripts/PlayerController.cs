@@ -10,11 +10,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject cameraHolder;
     [SerializeField] float mouseSensitivity, sprintSpeed, walkSpeed, jumpForce, smoothTime;
     Rigidbody rb;
+    PhotonView PV;
     float verticalLookRotation;
     bool grounded;
     Vector3 smoothMoveVelocity;
     Vector3 moveAmount;
-    PhotonView PV;
     int numClockItems = 0;
     public Text clockItemText;
     int numPublicMarkers = 5;
@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
     public Text privateMarkerText;
     public Color privateMarkerColor;
     public GameObject privateMarkerPrefab;
+    bool tileCheckerShot;
+    private int numTileCheckers = 5;
 
     void Awake()
     {
@@ -37,10 +39,12 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
-        } else {
         }
 
+        tileCheckerShot = false;
     }
+
+    float coolTime;
 
     void Update()
     {
@@ -49,9 +53,19 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        if (coolTime > 0)
+        {
+            coolTime -= Time.deltaTime;
+            tileCheckerShot = true;
+        }
+        else
+        {
+            tileCheckerShot = false;
+        }
         Look();
         Move();
         Jump();
+        Shoot();
         UseClockItem();
         PlacePublicMarker();
         PickUpPublicMarker();
@@ -73,11 +87,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public float turnSmoothTime = 0.1f;
+    float turnSmoothVelocity;
+    public Transform cam;
 
     void Move()
     {
-        Vector3 moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
-        moveAmount = Vector3.SmoothDamp(moveAmount, moveDir * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed), ref smoothMoveVelocity, smoothTime);
+        // float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+        Vector3 direction = new Vector3(0f, 0f, vertical).normalized;
+
+        if (direction.magnitude >= 0.1f)
+        {
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+            transform.rotation = Quaternion.Euler(0f, angle, 0f);
+            transform.position += moveDir * walkSpeed * Time.deltaTime;
+        }
     }
 
     void Jump()
@@ -85,6 +112,20 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
             rb.AddForce(transform.up * jumpForce);
+        }
+    }
+
+    public GameObject tileCheckerPrefab;
+
+    void Shoot()
+    {
+        if (Input.GetKeyDown(KeyCode.E)) {
+            if (!tileCheckerShot && numTileCheckers > 0) {
+                coolTime = 1f;
+                numTileCheckers--;
+                GameObject tileChecker = Instantiate(tileCheckerPrefab, transform.position + transform.forward * 0.5f, Quaternion.identity);
+                tileChecker.GetComponent<Rigidbody>().AddForce(transform.forward * 400f);
+            }
         }
     }
 
@@ -101,7 +142,6 @@ public class PlayerController : MonoBehaviour
             GameObject go = FindClosestTile();
             Tile tile = go.GetComponent<Tile>();
             tile.meltTimer += 5f;
-            //Debug.Log(go.transform.position);
         }
     }
 
@@ -158,7 +198,6 @@ public class PlayerController : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         Collider collider = collision.collider;
-
         if (collider.CompareTag("Tile"))
         {
             Tile tile = collider.gameObject.GetComponent<Tile>();
@@ -166,9 +205,15 @@ public class PlayerController : MonoBehaviour
             {
                 tile.onStepped();
             }
-        } else if(collider.CompareTag("ClockItem"))
+        }
+        else if (collider.CompareTag("ClockItem"))
         {
-            numClockItems += 1;
+            numClockItems++;
+            Destroy(collider.gameObject);
+        }
+        else if (collider.CompareTag("TileChecker"))
+        {
+            numTileCheckers++;
             Destroy(collider.gameObject);
         }
     }
@@ -176,9 +221,9 @@ public class PlayerController : MonoBehaviour
 
     void Look()
     {
-        transform.Rotate(Vector3.up * Input.GetAxisRaw("Mouse X") * mouseSensitivity);
+        transform.Rotate(Vector3.up * Input.GetAxisRaw("Mouse X") * mouseSensitivity * 0.8f);
 
-        verticalLookRotation += Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
+        verticalLookRotation += Input.GetAxisRaw("Mouse Y") * mouseSensitivity * 0.8f;
         verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90f);
         cameraHolder.transform.localEulerAngles = Vector3.left * verticalLookRotation;
     }
@@ -188,10 +233,6 @@ public class PlayerController : MonoBehaviour
         if (!PV.IsMine)
         {
             return;
-        }
-        if(rb != null) 
-        {
-            rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
         }
         clockItemText.text = "Clock Items: " + numClockItems;
         publicMarkerText.text = "Public Markers: " + numPublicMarkers;
@@ -282,6 +323,7 @@ public class PlayerController : MonoBehaviour
         {
             stream.SendNext(numClockItems);
             stream.SendNext(numPublicMarkers);
+            // stream.SendNext(numTileCheckers);
         }
         else if (stream.IsReading)
         {

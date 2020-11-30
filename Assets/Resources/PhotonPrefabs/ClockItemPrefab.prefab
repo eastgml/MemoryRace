@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: -7018273785011126383}
   - component: {fileID: 6146493737188923786}
   m_Layer: 0
-  m_Name: clock
+  m_Name: ClockItemPrefab
   m_TagString: ClockItem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
