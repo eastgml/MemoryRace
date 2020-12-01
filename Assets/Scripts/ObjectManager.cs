@@ -8,7 +8,7 @@ using System.IO;
 public class ObjectManager : MonoBehaviour
 {
     PhotonView PV;
-    private int numTileRows = 5;
+    private int numTileRows = 4;
     private int tilesPerRow = 10;
     
     void Awake()
@@ -57,6 +57,19 @@ public class ObjectManager : MonoBehaviour
                 if (Random.Range(0, 1f) < 0.2)
                 {
                     PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ClockItemPrefab"), new Vector3(j * 4, 1, i * 5 + 8), Quaternion.Euler(0,180f,0), 0);
+                }
+            }
+        }
+
+        // ZONE: regular tiles
+        for (int i = numTileRows * 2; i < numTileRows * 3; i++)
+        {
+            for (int j = 0; j < tilesPerRow; j++)
+            {
+                PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "TilePrefab"), new Vector3(j * 4, 0, i * 5 + 8), Quaternion.identity, 0, defaultTileData);
+                if (Random.Range(0, 1f) < 0.2)
+                {
+                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ClockItemPrefab"), new Vector3(j * 4, 1, i * 5 + 8), Quaternion.Euler(0, 180f, 0), 0);
                 }
             }
         }
