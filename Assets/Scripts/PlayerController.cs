@@ -157,7 +157,7 @@ public class PlayerController : MonoBehaviour
         {
             numPublicMarkers -= 1;
 
-            GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PublicMarkerPrefab"), transform.position - new Vector3(0, 0.8f, 0), Quaternion.identity, 0);
+            GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PublicMarkerPrefab"), transform.position - new Vector3(0, 0.1f, 0), Quaternion.identity, 0);
             go.GetComponent<MeshRenderer>().material.SetColor("_Color", publicMarkerColor);
 
         }
@@ -170,7 +170,7 @@ public class PlayerController : MonoBehaviour
             numPrivateMarkers -= 1;
             // GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PublicMarkerPrefab"), transform.position - new Vector3(0, 0.8f, 0), Quaternion.identity, 0);
             // go.GetComponent<MeshRenderer>().material.SetColor("_Color",publicMarkerColor);   
-            GameObject go = Instantiate(privateMarkerPrefab, transform.position - new Vector3(0, 0.7f, 0), Quaternion.identity);
+            GameObject go = Instantiate(privateMarkerPrefab, transform.position - new Vector3(0, 0.1f, 0), Quaternion.identity);
             go.GetComponent<MeshRenderer>().material.SetColor("_Color", privateMarkerColor);
         }
     }
