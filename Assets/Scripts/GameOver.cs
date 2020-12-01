@@ -30,7 +30,7 @@ public class GameOver : MonoBehaviourPunCallbacks
     void Start()
     {
         // connect to server
-        PhotonNetwork.ConnectUsingSettings();
+        //PhotonNetwork.ConnectUsingSettings();
     }
 
     [PunRPC]
