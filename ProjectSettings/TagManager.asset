@@ -9,6 +9,8 @@ TagManager:
   - PublicMarker
   - PrivateMarker
   - TileChecker
+  - FinishLine
+  - GameEndUI
   layers:
   - Default
   - TransparentFX

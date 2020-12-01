@@ -109,6 +109,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mesh: {fileID: 9170249981707990765}
   isBad: 0
+  isInstaDeath: 0
   meltTimer: 0
   isMelting: 0
   isRegenerating: 0

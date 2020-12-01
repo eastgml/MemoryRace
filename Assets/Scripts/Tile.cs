@@ -10,6 +10,7 @@ public class Tile : MonoBehaviour, IPunObservable
     public MeshRenderer mesh;
 
     public bool isBad; // true if tile is a bad tile
+    public bool isInstaDeath; // true if tile is insta death, false if regular
 
     private float meltPeriod; // time it takes to melt once stepped on
     public float meltTimer; // timer that tracks how far tile is in melt period
@@ -30,9 +31,17 @@ public class Tile : MonoBehaviour, IPunObservable
         }
 
         object[] tileTypeData = PV.InstantiationData;
+        if ((bool)tileTypeData[0])
+        {
+            isInstaDeath = true;
+        }
+        else
+        {
+            isInstaDeath = false;
+        }
 
-        // tiles have 0.4 chance to be bad tiles
-        float rand = Random.Range(0.0f, 10.0f);
+            // tiles have 0.4 chance to be bad tiles
+            float rand = Random.Range(0.0f, 10.0f);
         if (rand < 4.0f)
         {
             isBad = true;
@@ -44,16 +53,16 @@ public class Tile : MonoBehaviour, IPunObservable
             }
             else
             {
-                // otherwise bad tile takes anywhere from 0.5 to 3.0 seconds to melt
-                meltPeriod = Random.Range(0.5f, 3.0f);
+                // otherwise bad tile takes anywhere from 0.2 to 1.0 seconds to melt
+                meltPeriod = Random.Range(0.2f, 1.0f);
             }
 
-            PV.RPC("setTileInfo", RpcTarget.All, true, meltPeriod);
+            PV.RPC("setTileInfo", RpcTarget.All, true, meltPeriod, isInstaDeath);
         }
         else
         {
             isBad = false;
-            PV.RPC("setTileInfo", RpcTarget.All, false, 0.0f);
+            PV.RPC("setTileInfo", RpcTarget.All, false, 0.0f, isInstaDeath);
         }
 
         //meltTimer = meltPeriod;
@@ -118,10 +127,11 @@ public class Tile : MonoBehaviour, IPunObservable
     }
 
     [PunRPC]
-    private void setTileInfo(bool isBadTile, float meltTime)
+    private void setTileInfo(bool isBadTile, float meltTime, bool isInsta)
     {
         isBad = isBadTile;
         meltPeriod = meltTime;
+        isInstaDeath = isInsta;
         meltTimer = meltPeriod;
     }
 

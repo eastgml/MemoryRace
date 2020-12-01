@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     public GameObject privateMarkerPrefab;
     bool tileCheckerShot;
     private int numTileCheckers = 5;
+    public bool isFrozen = false; 
 
     void Awake()
     {
@@ -62,15 +63,20 @@ public class PlayerController : MonoBehaviour
         {
             tileCheckerShot = false;
         }
-        Look();
-        Move();
-        Jump();
-        Shoot();
-        UseClockItem();
-        PlacePublicMarker();
-        PickUpPublicMarker();
-        PlacePrivateMarker();
-        PickUpPrivateMarker();
+
+        if (!isFrozen)
+        {
+            Look();
+            Move();
+            Jump();
+            Shoot();
+            UseClockItem();
+            PlacePublicMarker();
+            PickUpPublicMarker();
+            PlacePrivateMarker();
+            PickUpPrivateMarker();
+        }
+        
         
         // respawn if player falls off
         if (transform.position.y < -10)
@@ -82,7 +88,6 @@ public class PlayerController : MonoBehaviour
             else
             {
                 transform.position = new Vector3(25, 0, 0);
-
             }
         }
     }
@@ -197,6 +202,10 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        if (!PV.IsMine)
+        {
+            return;
+        }
         Collider collider = collision.collider;
         if (collider.CompareTag("Tile"))
         {
@@ -216,8 +225,53 @@ public class PlayerController : MonoBehaviour
             numTileCheckers++;
             Destroy(collider.gameObject);
         }
+        else if (collider.CompareTag("FinishLine"))
+        {
+            endGame();
+        }
     }
 
+    [PunRPC]
+    public void createGameOverUI()
+    {
+        GameObject ui = Instantiate(GameOverUIPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        GameOver gameOverUI = ui.GetComponent<GameOver>();
+        gameOverUI.winnerText.text = "You lost";
+        gameObject.transform.GetChild(3).gameObject.SetActive(false);
+    }
+
+    [PunRPC]
+    private void setPCFreeze(bool freezeState)
+    {
+        isFrozen = freezeState;
+    }
+
+    public GameObject GameOverUIPrefab;
+
+    private void endGame()
+    {
+        isFrozen = true;
+
+        GameObject[] pcs;
+        pcs = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject pc in pcs)
+        {
+            PlayerController player = pc.GetComponent<PlayerController>();
+            player.isFrozen = true;
+            player.PV.RPC("setPCFreeze", RpcTarget.All, true);
+
+            if (!player.PV.IsMine)
+            {
+                player.PV.RPC("createGameOverUI", RpcTarget.Others);
+            }
+        }
+
+        GameObject ui = Instantiate(GameOverUIPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        GameOver gameOverUI = ui.GetComponent<GameOver>();
+        gameOverUI.winnerText.text = "You won";
+
+        gameObject.transform.GetChild(3).gameObject.SetActive(false);
+    }
 
     void Look()
     {
