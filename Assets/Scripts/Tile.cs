@@ -53,8 +53,8 @@ public class Tile : MonoBehaviour, IPunObservable
             }
             else
             {
-                // otherwise bad tile takes anywhere from 0.5 to 3.0 seconds to melt
-                meltPeriod = Random.Range(0.5f, 3.0f);
+                // otherwise bad tile takes anywhere from 0.1 to 1.0 seconds to melt
+                meltPeriod = Random.Range(0.1f, 1.0f);
             }
 
             PV.RPC("setTileInfo", RpcTarget.All, true, meltPeriod, isInstaDeath);
