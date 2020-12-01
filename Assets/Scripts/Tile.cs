@@ -78,7 +78,7 @@ public class Tile : MonoBehaviour, IPunObservable
         {
             //         JUST FOR TESTING PURPOSES BAD TILES WILL SHOW UP RED
             //         comment the line below out if you don't want them to be distinguishable
-            mesh.GetComponent<MeshRenderer>().material = badTileMat;
+            // mesh.GetComponent<MeshRenderer>().material = badTileMat;
 
             if (isMelting)
             {
@@ -112,7 +112,7 @@ public class Tile : MonoBehaviour, IPunObservable
         {
             //       JUST FOR TESTING PURPOSES BAD TILES WILL SHOW UP RED
             //       comment the line below out if you don't want them to be distinguishable
-            mesh.GetComponent<MeshRenderer>().material = originalMat;
+            //mesh.GetComponent<MeshRenderer>().material = originalMat;
         }
     }
 
