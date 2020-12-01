@@ -88,7 +88,6 @@ public class PlayerController : MonoBehaviour
             else
             {
                 transform.position = new Vector3(25, 0, 0);
-
             }
         }
     }
@@ -201,8 +200,30 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /*public void createGameOverUI()
+    {
+        GameObject ui = Instantiate(GameOverUIPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        GameOver gameOverUI = ui.GetComponent<GameOver>();
+        gameOverUI.winnerText.text = "You lost";
+    }*/
+
+    [PunRPC]
+    public void createGameOverUI()
+    {
+        Debug.Log("reached rpc"); 
+        GameObject ui = Instantiate(GameOverUIPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        GameOver gameOverUI = ui.GetComponent<GameOver>();
+        gameOverUI.winnerText.text = "You lost";
+    }
+
+    public GameObject GameOverUIPrefab;
+
     void OnCollisionEnter(Collision collision)
     {
+        if (!PV.IsMine)
+        {
+            return;
+        }
         Collider collider = collision.collider;
         if (collider.CompareTag("Tile"))
         {
@@ -224,7 +245,6 @@ public class PlayerController : MonoBehaviour
         }
         else if (collider.CompareTag("FinishLine"))
         {
-            Debug.Log("touched finish line");
             isFrozen = true;
 
             GameObject[] pcs;
@@ -233,13 +253,45 @@ public class PlayerController : MonoBehaviour
             {
                 PlayerController player = pc.GetComponent<PlayerController>();
                 player.isFrozen = true;
-                player.PV.RPC("setPCInfo", RpcTarget.All, true);         
+                player.PV.RPC("setPCFreeze", RpcTarget.All, true);
+
+                if (!player.PV.IsMine)
+                {
+                    //player.createGameOverUI();
+                    player.PV.RPC("createGameOverUI", RpcTarget.All);
+                }   
             }
+
+            GameObject ui = Instantiate(GameOverUIPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+            GameOver gameOverUI = ui.GetComponent<GameOver>();
+            gameOverUI.winnerText.text = "You won";
+            //PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "GameEndCanvas"), new Vector3(0, 0, 0), Quaternion.identity, 0);
+
+            /*GameObject[] UIs;
+            UIs = GameObject.FindGameObjectsWithTag("GameEndUI");
+            foreach (GameObject ui in UIs)
+            {
+                Debug.Log("one gameendUI object found");
+                GameOver gameOverMenu = ui.GetComponent<GameOver>();
+
+                if ((gameOverMenu.PV.Owner.IsMasterClient && PV.Owner.IsMasterClient) |
+                    (!gameOverMenu.PV.Owner.IsMasterClient && !PV.Owner.IsMasterClient))
+                {
+                    gameOverMenu.PV.RPC("setWinnerText", RpcTarget.All, "You won");
+                    //gameOverMenu.winnerText.text = "You won";
+                }
+                else
+                {
+                    gameOverMenu.PV.RPC("setWinnerText", RpcTarget.All, "You lost");
+                    //gameOverMenu.winnerText.text = "You lost";
+                }
+                ui.SetActive(true);
+            }*/
         }
     }
 
     [PunRPC]
-    private void setPCInfo(bool freezeState)
+    private void setPCFreeze(bool freezeState)
     {
         isFrozen = freezeState;
     }
