@@ -9,6 +9,7 @@ TagManager:
   - PublicMarker
   - PrivateMarker
   - TileChecker
+  - FinishLine
   layers:
   - Default
   - TransparentFX

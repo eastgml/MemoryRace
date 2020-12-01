@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     public GameObject privateMarkerPrefab;
     bool tileCheckerShot;
     private int numTileCheckers = 5;
+    public bool isFrozen = false; 
 
     void Awake()
     {
@@ -62,15 +63,20 @@ public class PlayerController : MonoBehaviour
         {
             tileCheckerShot = false;
         }
-        Look();
-        Move();
-        Jump();
-        Shoot();
-        UseClockItem();
-        PlacePublicMarker();
-        PickUpPublicMarker();
-        PlacePrivateMarker();
-        PickUpPrivateMarker();
+
+        if (!isFrozen)
+        {
+            Look();
+            Move();
+            Jump();
+            Shoot();
+            UseClockItem();
+            PlacePublicMarker();
+            PickUpPublicMarker();
+            PlacePrivateMarker();
+            PickUpPrivateMarker();
+        }
+        
         
         // respawn if player falls off
         if (transform.position.y < -10)
@@ -216,8 +222,27 @@ public class PlayerController : MonoBehaviour
             numTileCheckers++;
             Destroy(collider.gameObject);
         }
+        else if (collider.CompareTag("FinishLine"))
+        {
+            Debug.Log("touched finish line");
+            isFrozen = true;
+
+            GameObject[] pcs;
+            pcs = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject pc in pcs)
+            {
+                PlayerController player = pc.GetComponent<PlayerController>();
+                player.isFrozen = true;
+                player.PV.RPC("setPCInfo", RpcTarget.All, true);         
+            }
+        }
     }
 
+    [PunRPC]
+    private void setPCInfo(bool freezeState)
+    {
+        isFrozen = freezeState;
+    }
 
     void Look()
     {

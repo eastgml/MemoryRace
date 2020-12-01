@@ -345,6 +345,7 @@ MonoBehaviour:
   privateMarkerColor: {r: 0, g: 0, b: 0, a: 0}
   privateMarkerPrefab: {fileID: 3854481761646009659, guid: 71fad457e1e96403b8604ba2a41e96ac,
     type: 3}
+  isFrozen: 0
   turnSmoothTime: 0.1
   cam: {fileID: 5980830087882091414}
   tileCheckerPrefab: {fileID: 601107515140448603, guid: 25d5d8c2a97054848a9ad2c282b06951,
