@@ -33,7 +33,22 @@ public class GameOver : MonoBehaviourPunCallbacks
         //PhotonNetwork.ConnectUsingSettings();
     }
 
-    [PunRPC]
+    /*private GUIStyle buttonStyle;
+    void OnGUI()
+    {
+        GUILayout.BeginArea(new Rect(10, Screen.height / 2 + 100, Screen.width - 10, 200));
+        if (GUILayout.Button("Return to Main Menu"))
+        {
+            Application.LoadLevel("GameStart");
+        }
+        if (GUILayout.Button("Exit"))
+        {
+            Application.Quit();
+        }
+        GUILayout.EndArea();
+    }*/
+
+        [PunRPC]
     private void setWinnerText(string text)
     {
         winnerText.text = text;
