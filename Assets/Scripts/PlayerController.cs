@@ -237,7 +237,7 @@ public class PlayerController : MonoBehaviour
         GameObject ui = Instantiate(GameOverUIPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         GameOver gameOverUI = ui.GetComponent<GameOver>();
         gameOverUI.winnerText.text = "You lost";
-        gameObject.transform.GetChild(2).gameObject.SetActive(false);
+        gameObject.transform.GetChild(3).gameObject.SetActive(false);
     }
 
     [PunRPC]
@@ -270,7 +270,7 @@ public class PlayerController : MonoBehaviour
         GameOver gameOverUI = ui.GetComponent<GameOver>();
         gameOverUI.winnerText.text = "You won";
 
-        gameObject.transform.GetChild(2).gameObject.SetActive(false);
+        gameObject.transform.GetChild(3).gameObject.SetActive(false);
     }
 
     void Look()
