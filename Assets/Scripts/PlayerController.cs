@@ -128,8 +128,9 @@ public class PlayerController : MonoBehaviour
             if (!tileCheckerShot && numTileCheckers > 0) {
                 coolTime = 1f;
                 numTileCheckers--;
+                Vector3 projectileForce = transform.forward * 350f + new Vector3(0f, 200f, 0f);
                 GameObject tileChecker = Instantiate(tileCheckerPrefab, transform.position + transform.forward * 0.5f, Quaternion.identity);
-                tileChecker.GetComponent<Rigidbody>().AddForce(transform.forward * 400f);
+                tileChecker.GetComponent<Rigidbody>().AddForce(projectileForce);
             }
         }
     }
