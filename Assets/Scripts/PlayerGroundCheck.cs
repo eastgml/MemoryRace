@@ -10,26 +10,51 @@ public class PlayerGroundCheck : MonoBehaviour
         playerController = GetComponentInParent<PlayerController>();
     }
 
-    void OnTriggerEnter(Collider other) {
+    void OnTriggerEnter(Collider other)
+    {
         if (other == playerController.gameObject)
         {
             return;
         }
+
+        if (other.gameObject.CompareTag("Tile"))
+        {
+            Tile tile = other.gameObject.GetComponent<Tile>();
+            if (tile.isInstaDeath)
+            {
+                return;
+            }
+        }
+
         playerController.SetGroundedState(true);
+
     }
 
-    void OnTriggerExit(Collider other) {
-        if (other == playerController.gameObject) {
+    void OnTriggerExit(Collider other)
+    {
+        if (other == playerController.gameObject)
+        {
             return;
         }
         playerController.SetGroundedState(false);
     }
 
-    void OnTriggerStay(Collider other) {
+    void OnTriggerStay(Collider other)
+    {
         if (other == playerController.gameObject)
         {
             return;
         }
+
+        if (other.gameObject.CompareTag("Tile"))
+        {
+            Tile tile = other.gameObject.GetComponent<Tile>();
+            if (tile.isInstaDeath)
+            {
+                return;
+            }
+        }
+
         playerController.SetGroundedState(true);
     }
 
@@ -38,14 +63,27 @@ public class PlayerGroundCheck : MonoBehaviour
         {
             return;
         }
+
+        Collider collider = collision.collider;
+
+        if (collider.CompareTag("Tile"))
+        {
+            Tile tile = collider.gameObject.GetComponent<Tile>();
+            if (tile.isInstaDeath)
+            {
+                return;
+            }
+        }
+
         playerController.SetGroundedState(true);
     }
 
-    void OnColiisionExit(Collision collision) {
+    void OnCollisionExit(Collision collision) {
         if (collision.gameObject == playerController.gameObject)
         {
             return;
         }
+
         playerController.SetGroundedState(false);
     }
 
@@ -54,6 +92,18 @@ public class PlayerGroundCheck : MonoBehaviour
         {
             return;
         }
+
+        Collider collider = collision.collider;
+
+        if (collider.CompareTag("Tile"))
+        {
+            Tile tile = collider.gameObject.GetComponent<Tile>();
+            if (tile.isInstaDeath)
+            {
+                return;
+            }
+        }
+
         playerController.SetGroundedState(true);
     }
 }

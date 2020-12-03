@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using System.IO;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -16,17 +17,19 @@ public class PlayerController : MonoBehaviour
     Vector3 smoothMoveVelocity;
     Vector3 moveAmount;
     int numClockItems = 0;
-    public Text clockItemText;
+    [SerializeField] TMP_Text clockItemText;
     int numPublicMarkers = 5;
-    public Text publicMarkerText;
+    [SerializeField] TMP_Text publicMarkerText;
     public Color publicMarkerColor;
     int numPrivateMarkers = 5;
-    public Text privateMarkerText;
+    [SerializeField] TMP_Text privateMarkerText;
     public Color privateMarkerColor;
     public GameObject privateMarkerPrefab;
     bool tileCheckerShot;
     private int numTileCheckers = 5;
-    public bool isFrozen = false; 
+    public bool isFrozen = false;
+
+    [SerializeField] TMP_Text tileCheckerText;
 
     void Awake()
     {
@@ -278,9 +281,9 @@ public class PlayerController : MonoBehaviour
     {
         transform.Rotate(Vector3.up * Input.GetAxisRaw("Mouse X") * mouseSensitivity * 0.8f);
 
-        verticalLookRotation += Input.GetAxisRaw("Mouse Y") * mouseSensitivity * 0.8f;
-        verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90f);
-        cameraHolder.transform.localEulerAngles = Vector3.left * verticalLookRotation;
+        //verticalLookRotation += Input.GetAxisRaw("Mouse Y") * mouseSensitivity * 0.8f;
+        //verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90f);
+        //cameraHolder.transform.localEulerAngles = Vector3.left * verticalLookRotation;
     }
 
     void FixedUpdate()
@@ -292,6 +295,7 @@ public class PlayerController : MonoBehaviour
         clockItemText.text = "Clock Items: " + numClockItems;
         publicMarkerText.text = "Public Markers: " + numPublicMarkers;
         privateMarkerText.text = "Private Markers: " + numPrivateMarkers;
+        tileCheckerText.text = "Tile Checkers: " + numTileCheckers;
     }
 
     public GameObject FindClosestTile()
