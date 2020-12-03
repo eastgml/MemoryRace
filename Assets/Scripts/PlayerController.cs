@@ -290,6 +290,10 @@ public class PlayerController : MonoBehaviour
     {
         if (!PV.IsMine)
         {
+            clockItemText.text = "";
+            publicMarkerText.text = "";
+            privateMarkerText.text = "";
+            tileCheckerText.text = "";
             return;
         }
         clockItemText.text = "Clock Items: " + numClockItems;
