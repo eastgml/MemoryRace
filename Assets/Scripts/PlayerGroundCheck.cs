@@ -20,7 +20,7 @@ public class PlayerGroundCheck : MonoBehaviour
         if (other.gameObject.CompareTag("Tile"))
         {
             Tile tile = other.gameObject.GetComponent<Tile>();
-            if (tile.isInstaDeath)
+            if (tile.isInstaDeath && tile.isBad)
             {
                 return;
             }
@@ -49,7 +49,7 @@ public class PlayerGroundCheck : MonoBehaviour
         if (other.gameObject.CompareTag("Tile"))
         {
             Tile tile = other.gameObject.GetComponent<Tile>();
-            if (tile.isInstaDeath)
+            if (tile.isInstaDeath && tile.isBad)
             {
                 return;
             }
@@ -69,7 +69,7 @@ public class PlayerGroundCheck : MonoBehaviour
         if (collider.CompareTag("Tile"))
         {
             Tile tile = collider.gameObject.GetComponent<Tile>();
-            if (tile.isInstaDeath)
+            if (tile.isInstaDeath && tile.isBad)
             {
                 return;
             }
@@ -98,7 +98,7 @@ public class PlayerGroundCheck : MonoBehaviour
         if (collider.CompareTag("Tile"))
         {
             Tile tile = collider.gameObject.GetComponent<Tile>();
-            if (tile.isInstaDeath)
+            if (tile.isInstaDeath &&  tile.isBad)
             {
                 return;
             }
