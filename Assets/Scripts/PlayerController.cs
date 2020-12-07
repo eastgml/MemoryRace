@@ -226,6 +226,7 @@ public class PlayerController : MonoBehaviour
                 if (hit.collider.CompareTag("Tile") && numClockItems > 0) 
                 {
                     hit.collider.GetComponent<Tile>().meltTimer += 5f;
+                    hit.collider.GetComponent<Tile>().timeExtended = true;
                     numClockItems -= 1;
                 }
             }

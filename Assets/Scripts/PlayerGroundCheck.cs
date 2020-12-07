@@ -20,7 +20,7 @@ public class PlayerGroundCheck : MonoBehaviour
         if (other.gameObject.CompareTag("Tile"))
         {
             Tile tile = other.gameObject.GetComponent<Tile>();
-            if (tile.isInstaDeath && tile.isBad)
+            if (tile.isInstaDeath && tile.isBad && !tile.timeExtended)
             {
                 playerController.SetGroundedState(false);
                 return;
@@ -50,7 +50,7 @@ public class PlayerGroundCheck : MonoBehaviour
         if (other.gameObject.CompareTag("Tile"))
         {
             Tile tile = other.gameObject.GetComponent<Tile>();
-            if (tile.isInstaDeath && tile.isBad)
+            if (tile.isInstaDeath && tile.isBad && !tile.timeExtended)
             {
                 playerController.SetGroundedState(false);
                 return;
@@ -71,7 +71,7 @@ public class PlayerGroundCheck : MonoBehaviour
         if (collider.CompareTag("Tile"))
         {
             Tile tile = collider.gameObject.GetComponent<Tile>();
-            if (tile.isInstaDeath && tile.isBad)
+            if (tile.isInstaDeath && tile.isBad && !tile.timeExtended)
             {
                 playerController.SetGroundedState(false);
                 return;
@@ -101,7 +101,7 @@ public class PlayerGroundCheck : MonoBehaviour
         if (collider.CompareTag("Tile"))
         {
             Tile tile = collider.gameObject.GetComponent<Tile>();
-            if (tile.isInstaDeath && tile.isBad)
+            if (tile.isInstaDeath && tile.isBad && !tile.timeExtended)
             {
                 playerController.SetGroundedState(false);
                 return;

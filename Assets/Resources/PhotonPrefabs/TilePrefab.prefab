@@ -110,6 +110,7 @@ MonoBehaviour:
   mesh: {fileID: 9170249981707990765}
   isBad: 0
   isInstaDeath: 0
+  timeExtended: 0
   meltTimer: 0
   isMelting: 0
   isRegenerating: 0

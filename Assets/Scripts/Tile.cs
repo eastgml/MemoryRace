@@ -11,6 +11,7 @@ public class Tile : MonoBehaviour, IPunObservable
 
     public bool isBad; // true if tile is a bad tile
     public bool isInstaDeath; // true if tile is insta death, false if regular
+    public bool timeExtended; // true if clock item is used
 
     private float meltPeriod; // time it takes to melt once stepped on
     public float meltTimer; // timer that tracks how far tile is in melt period
@@ -70,6 +71,7 @@ public class Tile : MonoBehaviour, IPunObservable
         regenTimer = 3.0f;
         isMelting = false;
         isRegenerating = false;
+        timeExtended = false;
     }
 
     // Update is called once per frame
