@@ -23,7 +23,7 @@ public class Tile : MonoBehaviour, IPunObservable
     public Material badTileMat; // just for testing purposes
     public Material originalMat; // just for testing purposes
     public Material hoverMat;
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -141,7 +141,6 @@ public class Tile : MonoBehaviour, IPunObservable
     {
         mesh.GetComponent<MeshRenderer>().material = originalMat;
     }
-
 
     public void OnMouseOver()
     {

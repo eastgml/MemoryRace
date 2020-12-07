@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     Vector3 moveAmount;
     int numClockItems = 0;
     [SerializeField] TMP_Text clockItemText;
-    int numPublicMarkers = 5;
+    int numPublicMarkers = 3;
     [SerializeField] TMP_Text publicMarkerText;
     public Color publicMarkerColor;
     int numPrivateMarkers = 5;
@@ -245,13 +245,7 @@ public class PlayerController : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
-                if (hit.collider.CompareTag("PublicMarker"))
-                {
-                    //pick up the marker
-                    numPublicMarkers += 1;
-                    PhotonNetwork.Destroy(hit.transform.gameObject);
-
-                } else if(hit.collider.CompareTag("Tile"))
+                if(hit.collider.CompareTag("Tile"))
                 {
                     //place the marker
                     if (!hit.collider.GetComponent<Tile>().marked && numPublicMarkers > 0)
