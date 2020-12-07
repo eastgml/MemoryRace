@@ -12,6 +12,7 @@ TagManager:
   - FinishLine
   - GameEndUI
   - LoadingMenu
+  - Camera
   layers:
   - Default
   - TransparentFX
