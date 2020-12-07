@@ -8,7 +8,7 @@ using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
-    //[SerializeField] GameObject cameraHolder;
+    [SerializeField] GameObject cameraHolder;
     [SerializeField] float mouseSensitivity, sprintSpeed, walkSpeed, jumpForce, smoothTime;
     Rigidbody rb;
     PhotonView PV;
@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     bool tileCheckerShot;
     private int numTileCheckers = 5;
     public bool isFrozen = false;
+
     [SerializeField] TMP_Text tileCheckerText;
 
     void Awake()
@@ -36,8 +37,6 @@ public class PlayerController : MonoBehaviour
         PV = GetComponent<PhotonView>();
     }
 
-    public Camera cam;
-
     void Start()
     {
         if (!PV.IsMine)
@@ -45,8 +44,8 @@ public class PlayerController : MonoBehaviour
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
         }
+
         tileCheckerShot = false;
-        cam.GetComponent<CameraController>().setTarget(gameObject.transform);
     }
 
     float coolTime;
@@ -70,7 +69,7 @@ public class PlayerController : MonoBehaviour
 
         if (!isFrozen)
         {
-            //Look();
+            Look();
             Move();
             Jump();
             Shoot();
@@ -98,21 +97,21 @@ public class PlayerController : MonoBehaviour
 
     public float turnSmoothTime = 0.1f;
     float turnSmoothVelocity;
+    public Transform cam;
 
-    public CharacterController characterController;
     void Move()
     {
         // float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
+        Vector3 direction = new Vector3(0f, 0f, vertical).normalized;
 
         if (direction.magnitude >= 0.1f)
         {
-            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
-            transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
-            transform.position += direction * walkSpeed * Time.deltaTime;
+            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+            transform.rotation = Quaternion.Euler(0f, angle, 0f);
+            transform.position += moveDir * walkSpeed * Time.deltaTime;
         }
     }
 
@@ -128,7 +127,7 @@ public class PlayerController : MonoBehaviour
 
     void Shoot()
     {
-        if (Input.GetMouseButton(0)) {
+        if (Input.GetKeyDown(KeyCode.E)) {
             if (!tileCheckerShot && numTileCheckers > 0) {
                 coolTime = 1f;
                 numTileCheckers--;
@@ -232,6 +231,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (collider.CompareTag("FinishLine"))
         {
+<<<<<<< HEAD
 <<<<<<< Updated upstream
             //endGame();
             PhotonNetwork.LoadLevel(2);
@@ -239,6 +239,9 @@ public class PlayerController : MonoBehaviour
             PhotonNetwork.LoadLevel(2);
             // endGame();
 >>>>>>> Stashed changes
+=======
+            endGame();
+>>>>>>> parent of e4e1cde... tpm fixed
         }
     }
 
@@ -284,6 +287,15 @@ public class PlayerController : MonoBehaviour
         gameObject.transform.GetChild(3).gameObject.SetActive(false);
     }
 
+    void Look()
+    {
+        transform.Rotate(Vector3.up * Input.GetAxisRaw("Mouse X") * mouseSensitivity * 0.8f);
+
+        //verticalLookRotation += Input.GetAxisRaw("Mouse Y") * mouseSensitivity * 0.8f;
+        //verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90f);
+        //cameraHolder.transform.localEulerAngles = Vector3.left * verticalLookRotation;
+    }
+
     void FixedUpdate()
     {
         if (!PV.IsMine)
@@ -294,7 +306,6 @@ public class PlayerController : MonoBehaviour
             tileCheckerText.text = "";
             return;
         }
-
         clockItemText.text = "Clock Items: " + numClockItems;
         publicMarkerText.text = "Public Markers: " + numPublicMarkers;
         privateMarkerText.text = "Private Markers: " + numPrivateMarkers;

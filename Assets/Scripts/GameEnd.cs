@@ -11,6 +11,7 @@ public class GameEnd : MonoBehaviourPunCallbacks
         
     }
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
     public void ReturnMainMenu() {
         PhotonNetwork.LoadLevel(0);
@@ -32,6 +33,12 @@ public class GameEnd : MonoBehaviourPunCallbacks
     void RestartGame() {
         PhotonNetwork.LoadLevel(1);
 >>>>>>> Stashed changes
+=======
+    // Update is called once per frame
+    void Update()
+    {
+        
+>>>>>>> parent of e4e1cde... tpm fixed
     }
 
     void QuitGame() {
