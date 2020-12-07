@@ -66,3 +66,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61009a7aa6a68fc4c9dbb59500288bd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mat1: {fileID: 2100000, guid: 2d2f346773c3d488694e61001bbca917, type: 2}
+  mat2: {fileID: 2100000, guid: 9ed432968853749f9a711de94fc7d354, type: 2}

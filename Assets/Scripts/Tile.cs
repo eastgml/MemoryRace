@@ -20,6 +20,7 @@ public class Tile : MonoBehaviour, IPunObservable
 
     public Material badTileMat; // just for testing purposes
     public Material originalMat; // just for testing purposes
+    public Material hoverMat;
 
     // Start is called before the first frame update
     void Start()
@@ -41,10 +42,10 @@ public class Tile : MonoBehaviour, IPunObservable
         }
 
             // tiles have 0.4 chance to be bad tiles
-            float rand = Random.Range(0.0f, 10.0f);
-        if (rand < 4.0f)
+            // float rand = Random.Range(0.0f, 10.0f);
+        if (isBad)
         {
-            isBad = true;
+            // isBad = true;
 
             if ((bool)tileTypeData[0])
             {
@@ -61,7 +62,7 @@ public class Tile : MonoBehaviour, IPunObservable
         }
         else
         {
-            isBad = false;
+            // isBad = false;
             PV.RPC("setTileInfo", RpcTarget.All, false, 0.0f, isInstaDeath);
         }
 
@@ -125,6 +126,18 @@ public class Tile : MonoBehaviour, IPunObservable
             regenTimer = 3.0f;
         }
     }
+
+
+    public void OnMouseOver()
+    {
+        mesh.GetComponent<MeshRenderer>().material = hoverMat;
+    }
+
+    public void OnMouseExit()
+    {
+        mesh.GetComponent<MeshRenderer>().material = originalMat;
+    }
+
 
     [PunRPC]
     private void setTileInfo(bool isBadTile, float meltTime, bool isInsta)

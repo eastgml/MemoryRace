@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] TMP_Text tileCheckerText;
 
+    public Material markerMat;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -74,10 +76,11 @@ public class PlayerController : MonoBehaviour
             Jump();
             Shoot();
             UseClockItem();
-            PlacePublicMarker();
-            PickUpPublicMarker();
-            PlacePrivateMarker();
-            PickUpPrivateMarker();
+            HandleMarker();
+            // PlacePublicMarker();
+            // PickUpPublicMarker();
+            // PlacePrivateMarker();
+            // PickUpPrivateMarker();
         }
         
         
@@ -143,17 +146,6 @@ public class PlayerController : MonoBehaviour
         grounded = _grounded;
     }
 
-    void UseClockItem()
-    {
-        if (Input.GetKeyDown(KeyCode.L) &&  numClockItems > 0) 
-        {
-            numClockItems -= 1;
-            GameObject go = FindClosestTile();
-            Tile tile = go.GetComponent<Tile>();
-            tile.meltTimer += 5f;
-        }
-    }
-
     void PlacePublicMarker()
     {
         if (Input.GetKeyDown(KeyCode.K) && numPublicMarkers > 0)
@@ -200,6 +192,57 @@ public class PlayerController : MonoBehaviour
             {
                 Destroy(go);
                 numPrivateMarkers += 1;
+            }
+        }
+    }
+
+    public Camera camera;
+
+    // left clicking a tile uses the clock item
+    void UseClockItem()
+    {
+        if (Input.GetMouseButtonDown(0))
+        { 
+            // if left button pressed...
+            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+            // the object identified by hit.transform was clicked
+            // do whatever you want
+                if (hit.collider.CompareTag("Tile") && numClockItems > 0) 
+                {
+                    hit.collider.GetComponent<Tile>().meltTimer += 5f;
+                    numClockItems -= 1;
+                }
+            }
+        }
+    }
+
+    // right clicking a tile spawns a public marker
+    // right clicking a marker picks it up
+    void HandleMarker()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.collider.CompareTag("PublicMarker"))
+                {
+                    //pick up the marker
+                    numPublicMarkers += 1;
+                    PhotonNetwork.Destroy(hit.transform.gameObject);
+
+                } else if(hit.collider.CompareTag("Tile") && numPublicMarkers > 0)
+                {
+                    //place the marker
+                    numPrivateMarkers -= 1;
+                    Vector3 pos = hit.point + new Vector3(0, 0.3f, 0);
+                    GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PublicMarkerPrefab"), pos, Quaternion.identity, 0);
+                    go.GetComponent<MeshRenderer>().material = markerMat;
+                }
             }
         }
     }

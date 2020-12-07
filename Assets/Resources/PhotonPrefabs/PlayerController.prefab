@@ -225,6 +225,7 @@ MonoBehaviour:
   cam: {fileID: 5980830087882091414}
   tileCheckerPrefab: {fileID: 601107515140448603, guid: 25d5d8c2a97054848a9ad2c282b06951,
     type: 3}
+  camera: {fileID: 1329024622047547352}
   GameOverUIPrefab: {fileID: 6782865749494946644, guid: 37f2ae206f1052241b2e80bc5f9d966e,
     type: 3}
 --- !u!54 &8811859105033489589

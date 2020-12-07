@@ -22,7 +22,7 @@ public class PlayerGroundCheck : MonoBehaviour
             Tile tile = other.gameObject.GetComponent<Tile>();
             if (tile.isInstaDeath && tile.isBad)
             {
-                return;
+                // return;
             }
         }
 
@@ -51,7 +51,7 @@ public class PlayerGroundCheck : MonoBehaviour
             Tile tile = other.gameObject.GetComponent<Tile>();
             if (tile.isInstaDeath && tile.isBad)
             {
-                return;
+                // return;
             }
         }
 
@@ -71,7 +71,7 @@ public class PlayerGroundCheck : MonoBehaviour
             Tile tile = collider.gameObject.GetComponent<Tile>();
             if (tile.isInstaDeath && tile.isBad)
             {
-                return;
+                // return;
             }
         }
 
@@ -100,7 +100,7 @@ public class PlayerGroundCheck : MonoBehaviour
             Tile tile = collider.gameObject.GetComponent<Tile>();
             if (tile.isInstaDeath &&  tile.isBad)
             {
-                return;
+                // return;
             }
         }
 

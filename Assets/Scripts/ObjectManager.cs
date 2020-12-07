@@ -9,7 +9,7 @@ public class ObjectManager : MonoBehaviour
 {
     PhotonView PV;
     private int numTileRows = 4;
-    private int tilesPerRow = 10;
+    private int tilesPerRow = 8;
     
     void Awake()
     {
@@ -36,7 +36,13 @@ public class ObjectManager : MonoBehaviour
         {
             for (int j = 0; j < tilesPerRow; j++)
             {
-                PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "TilePrefab"), new Vector3(j * 5, 0, i * 5 + 8), Quaternion.identity, 0, defaultTileData);
+                GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "TilePrefab"), new Vector3(j * 5, 0, i * 5 + 8), Quaternion.identity, 0, defaultTileData);
+                if (Random.Range(0, 1f) < 0.4) {
+                    go.GetComponent<Tile>().isBad = true;
+                } else {
+                    go.GetComponent<Tile>().isBad = false;
+                }
+
                 // Randomly generate clock items
                 if (Random.Range(0, 1f) < 0.2)
                 {
@@ -51,9 +57,17 @@ public class ObjectManager : MonoBehaviour
 
         for (int i = numTileRows; i < numTileRows * 2; i++)
         {
+            int maxBadTileCnt = 6;
             for (int j = 0; j < tilesPerRow; j++)
             {
-                PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "InstaDeathTilePrefab"), new Vector3(j * 5, 0, i * 5 + 8), Quaternion.identity, 0, deathTileData);
+                GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "InstaDeathTilePrefab"), new Vector3(j * 5, 0, i * 5 + 8), Quaternion.identity, 0, deathTileData);
+                if (Random.Range(0, 1f) < 0.4 && maxBadTileCnt > 0) {
+                    go.GetComponent<Tile>().isBad = true;
+                    maxBadTileCnt -= 1;
+                } else {
+                    go.GetComponent<Tile>().isBad = false;
+                }
+
                 if (Random.Range(0, 1f) < 0.2)
                 {
                     PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ClockItemPrefab"), new Vector3(j * 5, 1, i * 5 + 8), Quaternion.Euler(0,180f,0), 0);
@@ -66,7 +80,13 @@ public class ObjectManager : MonoBehaviour
         {
             for (int j = 0; j < tilesPerRow; j++)
             {
-                PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "TilePrefab"), new Vector3(j * 5, 0, i * 5 + 8), Quaternion.identity, 0, defaultTileData);
+                GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "TilePrefab"), new Vector3(j * 5, 0, i * 5 + 8), Quaternion.identity, 0, defaultTileData);
+                if (Random.Range(0, 1f) < 0.4) {
+                    go.GetComponent<Tile>().isBad = true;
+                } else {
+                    go.GetComponent<Tile>().isBad = false;
+                }
+
                 if (Random.Range(0, 1f) < 0.2)
                 {
                     PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ClockItemPrefab"), new Vector3(j * 5, 1, i * 5 + 8), Quaternion.Euler(0, 180f, 0), 0);
