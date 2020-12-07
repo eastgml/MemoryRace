@@ -5,15 +5,11 @@ using Photon.Pun;
 
 public class GameEnd : MonoBehaviourPunCallbacks
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    public void QuitGame() {
+        Application.Quit();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void Restart() {
+        PhotonNetwork.LoadLevel(1);
     }
 }

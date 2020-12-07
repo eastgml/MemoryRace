@@ -28,7 +28,6 @@ public class PlayerController : MonoBehaviour
     bool tileCheckerShot;
     private int numTileCheckers = 5;
     public bool isFrozen = false;
-
     [SerializeField] TMP_Text tileCheckerText;
 
     public Material markerMat;
@@ -48,9 +47,12 @@ public class PlayerController : MonoBehaviour
         }
 
         tileCheckerShot = false;
+        shaderCoolTime = 15f;
+        cam.GetComponent<Shader>().enabled = false;
     }
 
     float coolTime;
+    float shaderCoolTime;
 
     void Update()
     {
@@ -69,9 +71,18 @@ public class PlayerController : MonoBehaviour
             tileCheckerShot = false;
         }
 
+        if (shaderCoolTime > 0)
+        {
+            cam.GetComponent<Shader>().enabled = false;
+            shaderCoolTime -= Time.deltaTime;
+        }
+        else {
+            cam.GetComponent<Shader>().enabled = true;
+        }
+
         if (!isFrozen)
         {
-            Look();
+            // Look();
             Move();
             Jump();
             Shoot();
@@ -87,6 +98,7 @@ public class PlayerController : MonoBehaviour
         // respawn if player falls off
         if (transform.position.y < -10)
         {
+            shaderCoolTime = 15f;
             if (PV.Owner.IsMasterClient)
             {
                 transform.position = new Vector3(5, 0, 0);
@@ -106,15 +118,16 @@ public class PlayerController : MonoBehaviour
     {
         // float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
-        Vector3 direction = new Vector3(0f, 0f, vertical).normalized;
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
 
         if (direction.magnitude >= 0.1f)
         {
-            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
+            // + cam.eulerAngles.y
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
-            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
-            transform.position += moveDir * walkSpeed * Time.deltaTime;
+            transform.position += direction * walkSpeed * Time.deltaTime;
         }
     }
 
@@ -274,7 +287,8 @@ public class PlayerController : MonoBehaviour
         }
         else if (collider.CompareTag("FinishLine"))
         {
-            endGame();
+            PhotonNetwork.LoadLevel(2);
+            // endGame();
         }
     }
 
