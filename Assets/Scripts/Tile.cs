@@ -18,6 +18,7 @@ public class Tile : MonoBehaviour, IPunObservable
     public bool isMelting; // true if tile is currently melting
     private float regenTimer; // after melting, time before it regenerates
     public bool isRegenerating; // true if tile is currently waiting to reappear
+    public bool marked;
 
     public Material badTileMat; // just for testing purposes
     public Material originalMat; // just for testing purposes
@@ -42,8 +43,8 @@ public class Tile : MonoBehaviour, IPunObservable
             isInstaDeath = false;
         }
 
-            // tiles have 0.4 chance to be bad tiles
-            // float rand = Random.Range(0.0f, 10.0f);
+        // tiles have 0.4 chance to be bad tiles
+        // float rand = Random.Range(0.0f, 10.0f);
         if (isBad)
         {
             // isBad = true;
@@ -72,6 +73,7 @@ public class Tile : MonoBehaviour, IPunObservable
         isMelting = false;
         isRegenerating = false;
         timeExtended = false;
+        marked = false;
     }
 
     // Update is called once per frame
@@ -129,6 +131,17 @@ public class Tile : MonoBehaviour, IPunObservable
         }
     }
 
+    [PunRPC]
+    public void changeMat() {
+        mesh.GetComponent<MeshRenderer>().material = hoverMat;
+    }
+
+    [PunRPC]
+    public void revertMat()
+    {
+        mesh.GetComponent<MeshRenderer>().material = originalMat;
+    }
+
 
     public void OnMouseOver()
     {
@@ -137,7 +150,9 @@ public class Tile : MonoBehaviour, IPunObservable
 
     public void OnMouseExit()
     {
-        mesh.GetComponent<MeshRenderer>().material = originalMat;
+        if (!marked) {
+            mesh.GetComponent<MeshRenderer>().material = originalMat;
+        }
     }
 
 

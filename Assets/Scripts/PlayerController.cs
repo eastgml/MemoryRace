@@ -22,13 +22,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] TMP_Text publicMarkerText;
     public Color publicMarkerColor;
     int numPrivateMarkers = 5;
-    [SerializeField] TMP_Text privateMarkerText;
     public Color privateMarkerColor;
     public GameObject privateMarkerPrefab;
     bool tileCheckerShot;
     private int numTileCheckers = 5;
     public bool isFrozen = false;
     [SerializeField] TMP_Text tileCheckerText;
+    public Material badTileMat;
 
     public Material markerMat;
 
@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        PhotonNetwork.AutomaticallySyncScene = true;
         if (!PV.IsMine)
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
@@ -235,6 +236,7 @@ public class PlayerController : MonoBehaviour
 
     // right clicking a tile spawns a public marker
     // right clicking a marker picks it up
+    // [PunRPC]
     void HandleMarker()
     {
         if (Input.GetMouseButtonDown(1))
@@ -249,13 +251,27 @@ public class PlayerController : MonoBehaviour
                     numPublicMarkers += 1;
                     PhotonNetwork.Destroy(hit.transform.gameObject);
 
-                } else if(hit.collider.CompareTag("Tile") && numPublicMarkers > 0)
+                } else if(hit.collider.CompareTag("Tile"))
                 {
                     //place the marker
-                    numPrivateMarkers -= 1;
-                    Vector3 pos = hit.point + new Vector3(0, 0.3f, 0);
+                    if (!hit.collider.GetComponent<Tile>().marked && numPublicMarkers > 0)
+                    {
+                        numPublicMarkers -= 1;
+                        hit.collider.GetComponent<Tile>().marked = true;
+                        PhotonView photonView = hit.collider.GetComponent<PhotonView>();
+                        photonView.RPC("changeMat", RpcTarget.All);
+                        //hit.collider.GetComponent<Tile>().changeMat();
+                    }
+                    else {
+                        numPublicMarkers += 1;
+                        hit.collider.GetComponent<Tile>().marked = false;
+                        PhotonView photonView = hit.collider.GetComponent<PhotonView>();
+                        photonView.RPC("revertMat", RpcTarget.All);
+                        //hit.collider.GetComponent<Tile>().revertMat();
+                    }
+                    /*Vector3 pos = hit.point + new Vector3(0, 0.3f, 0);
                     GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PublicMarkerPrefab"), pos, Quaternion.identity, 0);
-                    go.GetComponent<MeshRenderer>().material = markerMat;
+                    go.GetComponent<MeshRenderer>().material = markerMat;*/
                 }
             }
         }
@@ -288,8 +304,16 @@ public class PlayerController : MonoBehaviour
         }
         else if (collider.CompareTag("FinishLine"))
         {
-            PhotonNetwork.LoadLevel(2);
             // endGame();
+            PhotonView photonView = PhotonView.Get(this);
+            photonView.RPC("gameOver", RpcTarget.All);
+        }
+    }
+
+    [PunRPC]
+    public void gameOver() {
+        if (PhotonNetwork.IsMasterClient) {
+            PhotonNetwork.LoadLevel(2);
         }
     }
 
@@ -335,14 +359,6 @@ public class PlayerController : MonoBehaviour
         gameObject.transform.GetChild(3).gameObject.SetActive(false);
     }
 
-    void Look()
-    {
-        transform.Rotate(Vector3.up * Input.GetAxisRaw("Mouse X") * mouseSensitivity * 0.8f);
-
-        //verticalLookRotation += Input.GetAxisRaw("Mouse Y") * mouseSensitivity * 0.8f;
-        //verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90f);
-        //cameraHolder.transform.localEulerAngles = Vector3.left * verticalLookRotation;
-    }
 
     void FixedUpdate()
     {
@@ -350,13 +366,11 @@ public class PlayerController : MonoBehaviour
         {
             clockItemText.text = "";
             publicMarkerText.text = "";
-            privateMarkerText.text = "";
             tileCheckerText.text = "";
             return;
         }
         clockItemText.text = "Clock Items: " + numClockItems;
         publicMarkerText.text = "Public Markers: " + numPublicMarkers;
-        privateMarkerText.text = "Private Markers: " + numPrivateMarkers;
         tileCheckerText.text = "Tile Checkers: " + numTileCheckers;
     }
 

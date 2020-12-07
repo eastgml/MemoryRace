@@ -47,7 +47,7 @@ public class ObjectManager : MonoBehaviour
                 }
 
                 // Randomly generate clock items
-                if (Random.Range(0, 1f) < 0.2)
+                if (Random.Range(0, 1f) < 0.1)
                 {
                     PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ClockItemPrefab"), new Vector3(j * 5, 1, i * 5 + 8), Quaternion.Euler(0, 180f, 0), 0);
                 }

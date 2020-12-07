@@ -114,6 +114,7 @@ MonoBehaviour:
   meltTimer: 0
   isMelting: 0
   isRegenerating: 0
+  marked: 0
   badTileMat: {fileID: 2100000, guid: 9390177c600caca42ad00bf024d1a4b7, type: 2}
   originalMat: {fileID: 2100000, guid: 6ebf5d4d8a12c4b468ae22de4bd14f7a, type: 2}
   hoverMat: {fileID: 2100000, guid: 9390177c600caca42ad00bf024d1a4b7, type: 2}
