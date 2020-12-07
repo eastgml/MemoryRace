@@ -232,8 +232,13 @@ public class PlayerController : MonoBehaviour
         }
         else if (collider.CompareTag("FinishLine"))
         {
+<<<<<<< Updated upstream
             //endGame();
             PhotonNetwork.LoadLevel(2);
+=======
+            PhotonNetwork.LoadLevel(2);
+            // endGame();
+>>>>>>> Stashed changes
         }
     }
 

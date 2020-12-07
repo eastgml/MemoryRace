@@ -11,6 +11,7 @@ public class GameEnd : MonoBehaviourPunCallbacks
         
     }
 
+<<<<<<< Updated upstream
     public void ReturnMainMenu() {
         PhotonNetwork.LoadLevel(0);
     }
@@ -21,5 +22,20 @@ public class GameEnd : MonoBehaviourPunCallbacks
 
     public void QuitGame() {
         Application.Quit();
+=======
+    // Update is called once per frame
+    void Update()
+    {
+
     }
+
+    void RestartGame() {
+        PhotonNetwork.LoadLevel(1);
+>>>>>>> Stashed changes
+    }
+
+    void QuitGame() {
+        Application.Quit();
+    }
+
 }
