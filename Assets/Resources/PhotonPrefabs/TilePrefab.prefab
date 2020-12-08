@@ -115,9 +115,17 @@ MonoBehaviour:
   isMelting: 0
   isRegenerating: 0
   marked: 0
+  clockItemGlowPeriod: 0
+  clockItemGlowTimer: 0
+  isGlowing: 0
+  blink: 0
+  blinkTimer: 0
+  blinkPeriod: 0
   badTileMat: {fileID: 2100000, guid: 9390177c600caca42ad00bf024d1a4b7, type: 2}
   originalMat: {fileID: 2100000, guid: 6ebf5d4d8a12c4b468ae22de4bd14f7a, type: 2}
   hoverMat: {fileID: 2100000, guid: 9390177c600caca42ad00bf024d1a4b7, type: 2}
+  clockItemMat: {fileID: 2100000, guid: 7df78a1b90f8ea747ba67db19ce50a52, type: 2}
+  clockSound: {fileID: 8300000, guid: cfe6bb16274564f4bb8e6d574b3c50af, type: 3}
 --- !u!114 &-8528352964843077347
 MonoBehaviour:
   m_ObjectHideFlags: 0

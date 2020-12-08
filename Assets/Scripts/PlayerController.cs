@@ -47,9 +47,17 @@ public class PlayerController : MonoBehaviour
             Destroy(rb);
         }
 
+        GameObject.FindGameObjectWithTag("Music").GetComponent<BGM>().PlayMusic();
         tileCheckerShot = false;
         shaderCoolTime = 15f;
         cam.GetComponent<Shader>().enabled = false;
+
+        // turn off tracker for me only, so other player can still see it
+        GameObject trackerObject = gameObject.transform.GetChild(0).gameObject;
+        if (trackerObject.GetComponent<PhotonView>().IsMine) 
+        { 
+            Destroy(trackerObject); 
+        }
     }
 
     float coolTime;
@@ -102,11 +110,11 @@ public class PlayerController : MonoBehaviour
             shaderCoolTime = 15f;
             if (PV.Owner.IsMasterClient)
             {
-                transform.position = new Vector3(5, 0, 0);
+                transform.position = new Vector3(15, 0, 0);
             }
             else
             {
-                transform.position = new Vector3(25, 0, 0);
+                transform.position = new Vector3(15, 0, 0);
             }
         }
     }
@@ -226,6 +234,7 @@ public class PlayerController : MonoBehaviour
             // do whatever you want
                 if (hit.collider.CompareTag("Tile") && numClockItems > 0) 
                 {
+                    hit.collider.GetComponent<Tile>().OnClockItemUsed();
                     hit.collider.GetComponent<Tile>().meltTimer += 5f;
                     hit.collider.GetComponent<Tile>().timeExtended = true;
                     numClockItems -= 1;
@@ -271,6 +280,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    [PunRPC]
+    public void DestroyOnNetwork(int pvID)
+    {
+        PhotonNetwork.Destroy(PhotonView.Find(pvID));
+    }
+
     void OnCollisionEnter(Collision collision)
     {
         if (!PV.IsMine)
@@ -289,12 +304,24 @@ public class PlayerController : MonoBehaviour
         else if (collider.CompareTag("ClockItem"))
         {
             numClockItems++;
-            Destroy(collider.gameObject);
+
+            int pvID = collider.gameObject.GetComponent<PhotonView>().ViewID;
+            PV.RPC("DestroyOnNetwork", RpcTarget.MasterClient, pvID);
+            PhotonNetwork.Destroy(collider.gameObject);
         }
         else if (collider.CompareTag("TileChecker"))
         {
             numTileCheckers++;
             Destroy(collider.gameObject);
+        }
+        else if (collider.CompareTag("DistortionResetter"))
+        {
+            shaderCoolTime = 15f;
+            collider.gameObject.GetComponent<DistortionResetter>().onHit();
+
+            int pvID = collider.gameObject.GetComponent<PhotonView>().ViewID;
+            PV.RPC("DestroyOnNetwork", RpcTarget.MasterClient, pvID);
+            PhotonNetwork.Destroy(collider.gameObject);
         }
         else if (collider.CompareTag("FinishLine"))
         {

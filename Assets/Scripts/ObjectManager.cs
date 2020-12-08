@@ -35,6 +35,7 @@ public class ObjectManager : MonoBehaviour
         for (int i = 0; i < numTileRows; i++)
         {
             int maxClockItems = 2;
+            int maxDistortionResetters = 2;
             for (int j = 0; j < tilesPerRow; j++)
             {
                 GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "TilePrefab"), new Vector3(j * 5, 0, i * 5 + 8), Quaternion.identity, 0, defaultTileData);
@@ -48,10 +49,17 @@ public class ObjectManager : MonoBehaviour
                 }
 
                 // Randomly generate clock items
-                if (Random.Range(0, 1f) < 0.3 && maxClockItems > 0)
+                float rand = Random.Range(0, 1f);
+                if (rand < 0.3 && maxClockItems > 0)
                 {
                     PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ClockItemPrefab"), new Vector3(j * 5, 1, i * 5 + 8), Quaternion.Euler(0, 180f, 0), 0);
                     maxClockItems -= 1;
+                }
+                // Randomly generate distortion resetters
+                else if (rand < 0.6 && maxDistortionResetters > 0)
+                {
+                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "GlassesPrefab"), new Vector3(j * 5, 1, i * 5 + 8), Quaternion.Euler(0, -45f, 0), 0);
+                    maxDistortionResetters -= 1;
                 }
             }
         }
@@ -64,6 +72,8 @@ public class ObjectManager : MonoBehaviour
         {
             int maxBadTileCnt = 6;
             int maxClockItems = 2;
+            int maxDistortionResetters = 2;
+
             for (int j = 0; j < tilesPerRow; j++)
             {
                 GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "InstaDeathTilePrefab"), new Vector3(j * 5, 0, i * 5 + 8), Quaternion.identity, 0, deathTileData);
@@ -77,10 +87,18 @@ public class ObjectManager : MonoBehaviour
                     go.GetComponent<Tile>().isBad = false;
                 }
 
-                if (Random.Range(0, 1f) < 0.2 && maxClockItems > 0)
+                // generate clock items
+                float rand = Random.Range(0, 1f);
+                if (rand < 0.2 && maxClockItems > 0)
                 {
                     PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ClockItemPrefab"), new Vector3(j * 5, 1, i * 5 + 8), Quaternion.Euler(0, 180f, 0), 0);
                     maxClockItems -= 1;
+                }
+                // generate distortion resetters
+                else if (rand < 0.4 && maxDistortionResetters > 0)
+                {
+                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "GlassesPrefab"), new Vector3(j * 5, 1, i * 5 + 8), Quaternion.Euler(0, -45f, 0), 0);
+                    maxDistortionResetters -= 1;
                 }
             }
         }
@@ -89,6 +107,8 @@ public class ObjectManager : MonoBehaviour
         for (int i = numTileRows * 2; i < numTileRows * 3; i++)
         {
             int maxClockItems = 2;
+            int maxDistortionResetters = 2;
+
             for (int j = 0; j < tilesPerRow; j++)
             {
                 GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "TilePrefab"), new Vector3(j * 5, 0, i * 5 + 8), Quaternion.identity, 0, defaultTileData);
@@ -101,10 +121,18 @@ public class ObjectManager : MonoBehaviour
                     go.GetComponent<Tile>().isBad = false;
                 }
 
-                if (Random.Range(0, 1f) < 0.3 && maxClockItems > 0)
+                // generate clock items 
+                float rand = Random.Range(0, 1f);
+                if (rand < 0.3 && maxClockItems > 0)
                 {
                     PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ClockItemPrefab"), new Vector3(j * 5, 1, i * 5 + 8), Quaternion.Euler(0, 180f, 0), 0);
                     maxClockItems -= 1;
+                }
+                // generate distortion resetters
+                else if (rand < 0.6 && maxDistortionResetters > 0)
+                {
+                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "GlassesPrefab"), new Vector3(j * 5, 1, i * 5 + 8), Quaternion.Euler(0, -45f, 0), 0);
+                    maxDistortionResetters -= 1;
                 }
             }
         }
