@@ -44,6 +44,8 @@ public class DistortionResetter : MonoBehaviour, IPunObservable
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.CompareTag("Player")) { 
             other.gameObject.GetComponent<PlayerController>().shaderCoolTime = 15f;
+            AudioSource.PlayClipAtPoint(refreshSound, gameObject.transform.position, 0.45f);
+
             if (PhotonNetwork.IsMasterClient)
             {
                 PhotonNetwork.Destroy(gameObject);
