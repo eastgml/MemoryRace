@@ -58,7 +58,7 @@ public class ObjectManager : MonoBehaviour
                 // Randomly generate distortion resetters
                 else if (rand < 0.6 && maxDistortionResetters > 0)
                 {
-                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "GlassesPrefab"), new Vector3(j * 5, 1, i * 5 + 8), Quaternion.Euler(0, 180f, 0), 0);
+                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "GlassesPrefab"), new Vector3(j * 5, 1, i * 5 + 8), Quaternion.Euler(0, -45f, 0), 0);
                     maxDistortionResetters -= 1;
                 }
             }
@@ -97,7 +97,7 @@ public class ObjectManager : MonoBehaviour
                 // generate distortion resetters
                 else if (rand < 0.4 && maxDistortionResetters > 0)
                 {
-                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "GlassesPrefab"), new Vector3(j * 5, 1, i * 5 + 8), Quaternion.Euler(0, 180f, 0), 0);
+                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "GlassesPrefab"), new Vector3(j * 5, 1, i * 5 + 8), Quaternion.Euler(0, -45f, 0), 0);
                     maxDistortionResetters -= 1;
                 }
             }
@@ -131,7 +131,7 @@ public class ObjectManager : MonoBehaviour
                 // generate distortion resetters
                 else if (rand < 0.6 && maxDistortionResetters > 0)
                 {
-                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "GlassesPrefab"), new Vector3(j * 5, 1, i * 5 + 8), Quaternion.Euler(0, 180f, 0), 0);
+                    PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "GlassesPrefab"), new Vector3(j * 5, 1, i * 5 + 8), Quaternion.Euler(0, -45f, 0), 0);
                     maxDistortionResetters -= 1;
                 }
             }

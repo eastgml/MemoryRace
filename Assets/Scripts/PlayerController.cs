@@ -310,6 +310,7 @@ public class PlayerController : MonoBehaviour
         else if (collider.CompareTag("DistortionResetter"))
         {
             shaderCoolTime = 15f;
+            collider.gameObject.GetComponent<DistortionResetter>().onHit();
 
             int pvID = collider.gameObject.GetComponent<PhotonView>().ViewID;
             PV.RPC("DestroyOnNetwork", RpcTarget.MasterClient, pvID);

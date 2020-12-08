@@ -23,6 +23,12 @@ public class DistortionResetter : MonoBehaviour, IPunObservable
         
     }
 
+    public AudioClip refreshSound;
+    public void onHit()
+    {
+        AudioSource.PlayClipAtPoint(refreshSound, gameObject.transform.position, 0.45f);
+    }
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
