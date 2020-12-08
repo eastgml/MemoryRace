@@ -23,6 +23,30 @@ public class ClockItem : MonoBehaviour, IPunObservable
     {
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            other.gameObject.GetComponent<PlayerController>().numClockItems += 1;
+            if (PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.Destroy(gameObject);
+            }
+            else
+            {
+                int pvID = gameObject.GetComponent<PhotonView>().ViewID;
+                PhotonView photonView = PhotonView.Get(this);
+                photonView.RPC("DestroyOnNetwork", RpcTarget.MasterClient, pvID);
+            }
+        }
+    }
+
+    [PunRPC]
+    public void DestroyOnNetwork(int pvID)
+    {
+        PhotonNetwork.Destroy(PhotonView.Find(pvID));
+    }
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)

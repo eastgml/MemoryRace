@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     bool grounded;
     Vector3 smoothMoveVelocity;
     Vector3 moveAmount;
-    int numClockItems = 0;
+    public int numClockItems = 0;
     [SerializeField] TMP_Text clockItemText;
     int numPublicMarkers = 3;
     [SerializeField] TMP_Text publicMarkerText;
@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
     }
 
     float coolTime;
-    float shaderCoolTime;
+    public float shaderCoolTime;
 
 
     void Update()
@@ -303,20 +303,20 @@ public class PlayerController : MonoBehaviour
                 tile.onStepped();
             }
         }
-        else if (collider.CompareTag("ClockItem"))
+        /*else if (collider.CompareTag("ClockItem"))
         {
             numClockItems++;
 
             int pvID = collider.gameObject.GetComponent<PhotonView>().ViewID;
             PV.RPC("DestroyOnNetwork", RpcTarget.MasterClient, pvID);
             PhotonNetwork.Destroy(collider.gameObject);
-        }
+        }*/
         else if (collider.CompareTag("TileChecker"))
         {
             numTileCheckers++;
             Destroy(collider.gameObject);
         }
-        else if (collider.CompareTag("DistortionResetter"))
+        /*else if (collider.CompareTag("DistortionResetter"))
         {
             shaderCoolTime = 15f;
             collider.gameObject.GetComponent<DistortionResetter>().onHit();
@@ -324,7 +324,7 @@ public class PlayerController : MonoBehaviour
             int pvID = collider.gameObject.GetComponent<PhotonView>().ViewID;
             PV.RPC("DestroyOnNetwork", RpcTarget.MasterClient, pvID);
             PhotonNetwork.Destroy(collider.gameObject);
-        }
+        }*/
         else if (collider.CompareTag("FinishLine"))
         {
             // endGame();

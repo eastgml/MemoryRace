@@ -207,6 +207,7 @@ MonoBehaviour:
   walkSpeed: 4
   jumpForce: 250
   smoothTime: 0.15
+  numClockItems: 0
   clockItemText: {fileID: 2350882223763487573}
   publicMarkerText: {fileID: 266307403186844476}
   publicMarkerColor: {r: 0, g: 0, b: 0, a: 0}
@@ -217,6 +218,7 @@ MonoBehaviour:
   tileCheckerText: {fileID: 1512034323331187156}
   badTileMat: {fileID: 2100000, guid: 9ed432968853749f9a711de94fc7d354, type: 2}
   markerMat: {fileID: 0}
+  shaderCoolTime: 0
   turnSmoothTime: 0.1
   cam: {fileID: 5980830087882091414}
   tileCheckerPrefab: {fileID: 601107515140448603, guid: 25d5d8c2a97054848a9ad2c282b06951,
