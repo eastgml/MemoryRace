@@ -13,6 +13,7 @@ TagManager:
   - GameEndUI
   - LoadingMenu
   - DistortionResetter
+  - Music
   layers:
   - Default
   - TransparentFX

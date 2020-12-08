@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviour
             Destroy(rb);
         }
 
+        GameObject.FindGameObjectWithTag("Music").GetComponent<BGM>().PlayMusic();
         tileCheckerShot = false;
         shaderCoolTime = 15f;
         cam.GetComponent<Shader>().enabled = false;
@@ -226,6 +227,7 @@ public class PlayerController : MonoBehaviour
             // do whatever you want
                 if (hit.collider.CompareTag("Tile") && numClockItems > 0) 
                 {
+                    hit.collider.GetComponent<Tile>().OnClockItemUsed();
                     hit.collider.GetComponent<Tile>().meltTimer += 5f;
                     hit.collider.GetComponent<Tile>().timeExtended = true;
                     numClockItems -= 1;

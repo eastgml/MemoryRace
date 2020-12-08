@@ -14,15 +14,20 @@ public class Tile : MonoBehaviour, IPunObservable
     public bool timeExtended; // true if clock item is used
 
     private float meltPeriod; // time it takes to melt once stepped on
-    public float meltTimer; // timer that tracks how far tile is in melt period
+    public float meltTimer; // timer that tracks how far tile is in melt period. Starts at = meltPeriod, counts down until 0
     public bool isMelting; // true if tile is currently melting
     private float regenTimer; // after melting, time before it regenerates
     public bool isRegenerating; // true if tile is currently waiting to reappear
     public bool marked;
+    public float clockItemGlowPeriod; // time it glows for
+    public float clockItemGlowTimer; // timer that tracks how far tile is in glow period. Starts at 0, counts up until glowPeriod
+    public bool isGlowing; // tile is currently glowing to show clock item was used
+
 
     public Material badTileMat; // just for testing purposes
     public Material originalMat; // just for testing purposes
     public Material hoverMat;
+    public Material clockItemMat;
     
     // Start is called before the first frame update
     void Start()
@@ -68,6 +73,9 @@ public class Tile : MonoBehaviour, IPunObservable
             PV.RPC("setTileInfo", RpcTarget.All, false, 0.0f, isInstaDeath);
         }
 
+        isGlowing = false;
+        clockItemGlowPeriod = 0.5f;
+        clockItemGlowTimer = clockItemGlowPeriod;
         //meltTimer = meltPeriod;
         regenTimer = 3.0f;
         isMelting = false;
@@ -79,6 +87,17 @@ public class Tile : MonoBehaviour, IPunObservable
     // Update is called once per frame
     void Update()
     {
+        if (isGlowing && clockItemGlowTimer > 0.0f)
+        {
+            clockItemGlowTimer -= Time.deltaTime;
+        }
+        else if (isGlowing && clockItemGlowTimer <= 0.0f)
+        {
+            isGlowing = false;
+            clockItemGlowTimer = clockItemGlowPeriod;
+            revertMat();
+        }
+
         if (isBad)
         {
             //         JUST FOR TESTING PURPOSES BAD TILES WILL SHOW UP RED
@@ -144,14 +163,25 @@ public class Tile : MonoBehaviour, IPunObservable
 
     public void OnMouseOver()
     {
-        mesh.GetComponent<MeshRenderer>().material = hoverMat;
+        if (!isGlowing)
+        {
+            mesh.GetComponent<MeshRenderer>().material = hoverMat;
+        }    
     }
 
     public void OnMouseExit()
     {
-        if (!marked) {
+        if (!marked && !isGlowing) {
             mesh.GetComponent<MeshRenderer>().material = originalMat;
         }
+    }
+
+    public AudioClip clockSound;
+    public void OnClockItemUsed()
+    {
+        AudioSource.PlayClipAtPoint(clockSound, gameObject.transform.position);
+        isGlowing = true;
+        mesh.GetComponent<MeshRenderer>().material = clockItemMat;
     }
 
 

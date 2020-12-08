@@ -80,7 +80,9 @@ public class Launcher : MonoBehaviourPunCallbacks
         MenuManager.Instance.OpenMenu("error");
     }
 
-    public void StartGame() {
+
+    public void StartGame()
+    {
         PhotonNetwork.LoadLevel(1);
     }
 
