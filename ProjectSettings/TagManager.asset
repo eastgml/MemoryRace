@@ -12,6 +12,7 @@ TagManager:
   - FinishLine
   - GameEndUI
   - LoadingMenu
+  - DistortionResetter
   layers:
   - Default
   - TransparentFX
