@@ -327,16 +327,20 @@ public class PlayerController : MonoBehaviour
         else if (collider.CompareTag("FinishLine"))
         {
             // endGame();
-            PhotonView photonView = PhotonView.Get(this);
-            photonView.RPC("gameOver", RpcTarget.All);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.LoadLevel(2);
+            }
+            else {
+                PhotonView photonView = PhotonView.Get(this);
+                photonView.RPC("gameOver", RpcTarget.MasterClient);
+            }
         }
     }
 
     [PunRPC]
     public void gameOver() {
-        if (PhotonNetwork.IsMasterClient) {
-            PhotonNetwork.LoadLevel(2);
-        }
+        PhotonNetwork.LoadLevel(2);
     }
 
     [PunRPC]
