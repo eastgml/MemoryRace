@@ -207,6 +207,7 @@ public class Tile : MonoBehaviour, IPunObservable
     public void OnClockItemUsed()
     {
         AudioSource.PlayClipAtPoint(clockSound, gameObject.transform.position, 2f);
+        clockItemGlowTimer = 0.5f;
         isGlowing = true;
         mesh.GetComponent<MeshRenderer>().material = clockItemMat;
     }
