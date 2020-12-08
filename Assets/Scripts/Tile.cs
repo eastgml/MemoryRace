@@ -101,7 +101,7 @@ public class Tile : MonoBehaviour, IPunObservable
         {
             isGlowing = false;
             clockItemGlowTimer = clockItemGlowPeriod;
-            revertMat();
+            PV.RPC("revertMat", RpcTarget.All);
         }
 
         if (isBad)
@@ -202,9 +202,11 @@ public class Tile : MonoBehaviour, IPunObservable
     }
 
     public AudioClip clockSound;
+
+    [PunRPC]
     public void OnClockItemUsed()
     {
-        AudioSource.PlayClipAtPoint(clockSound, gameObject.transform.position, 1.7f);
+        AudioSource.PlayClipAtPoint(clockSound, gameObject.transform.position, 2f);
         isGlowing = true;
         mesh.GetComponent<MeshRenderer>().material = clockItemMat;
     }
