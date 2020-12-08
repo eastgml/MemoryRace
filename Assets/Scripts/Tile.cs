@@ -22,6 +22,9 @@ public class Tile : MonoBehaviour, IPunObservable
     public float clockItemGlowPeriod; // time it glows for
     public float clockItemGlowTimer; // timer that tracks how far tile is in glow period. Starts at 0, counts up until glowPeriod
     public bool isGlowing; // tile is currently glowing to show clock item was used
+    public bool blink; // true if tile is gone during the current blink
+    public float blinkTimer;
+    public float blinkPeriod; // how long in between tile blinks when a bad tile is stepped on
 
 
     public Material badTileMat; // just for testing purposes
@@ -82,6 +85,9 @@ public class Tile : MonoBehaviour, IPunObservable
         isRegenerating = false;
         timeExtended = false;
         marked = false;
+        blink = true;
+        blinkPeriod = 0.2f;
+        blinkTimer = blinkPeriod;
     }
 
     // Update is called once per frame
@@ -107,6 +113,7 @@ public class Tile : MonoBehaviour, IPunObservable
             if (isMelting)
             {
                 meltTimer -= Time.deltaTime;
+                blinkTimer -= Time.deltaTime;
             }
 
             if (isRegenerating)
@@ -114,12 +121,30 @@ public class Tile : MonoBehaviour, IPunObservable
                 regenTimer -= Time.deltaTime;
             }
 
+            if (isMelting && blinkTimer <= 0)
+            {
+                if (blink)
+                {
+                    PV.RPC("setTileActive", RpcTarget.All, false, true);
+                    blink = false;
+                }
+                else
+                {
+                    PV.RPC("setTileActive", RpcTarget.All, true, true);
+                    blink = true;
+                }
+                
+                blinkTimer = blinkPeriod;
+            }
+
             // tile has melted, so it falls through
             if (isMelting && meltTimer <= 0)
             {
                 isMelting = false;
                 meltTimer = meltPeriod;
-                PV.RPC("setTileActive", RpcTarget.All, false);
+                PV.RPC("setTileActive", RpcTarget.All, false, false);
+                blinkTimer = blinkPeriod;
+                blink = true;
                 isRegenerating = true;
             }
 
@@ -128,7 +153,7 @@ public class Tile : MonoBehaviour, IPunObservable
             {
                 isRegenerating = false;
                 regenTimer = 3.0f;
-                PV.RPC("setTileActive", RpcTarget.All, true);
+                PV.RPC("setTileActive", RpcTarget.All, true, true);
 
             }
         }
@@ -195,10 +220,10 @@ public class Tile : MonoBehaviour, IPunObservable
     }
 
     [PunRPC]
-    private void setTileActive(bool active)
+    private void setTileActive(bool meshActive, bool colliderActive)
     {
-        mesh.enabled = active;
-        gameObject.GetComponent<BoxCollider>().enabled = active;
+        mesh.enabled = meshActive;
+        gameObject.GetComponent<BoxCollider>().enabled = colliderActive;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
