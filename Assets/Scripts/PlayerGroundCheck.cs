@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerGroundCheck : MonoBehaviour
 {
     PlayerController playerController;
+    public GameObject glassItem;
+    public GameObject clockItem;
 
     void Awake() {
         playerController = GetComponentInParent<PlayerController>();
@@ -13,6 +15,11 @@ public class PlayerGroundCheck : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (other == playerController.gameObject)
+        {
+            return;
+        }
+
+        if (other.gameObject.CompareTag("ClockItem") || other.gameObject.CompareTag("DistortionResetter"))
         {
             return;
         }
@@ -37,6 +44,12 @@ public class PlayerGroundCheck : MonoBehaviour
         {
             return;
         }
+
+        if (other.gameObject.CompareTag("ClockItem") || other.gameObject.CompareTag("DistortionResetter"))
+        {
+            return;
+        }
+
         playerController.SetGroundedState(false);
     }
 
@@ -44,6 +57,10 @@ public class PlayerGroundCheck : MonoBehaviour
     {
         if (other == playerController.gameObject)
         {
+            return;
+        }
+
+        if (other.gameObject.CompareTag("ClockItem") || other.gameObject.CompareTag("DistortionResetter")) {
             return;
         }
 
@@ -68,6 +85,11 @@ public class PlayerGroundCheck : MonoBehaviour
 
         Collider collider = collision.collider;
 
+        if (collider.CompareTag("DistortionResetter") || collider.CompareTag("ClockItem")) {
+            return;
+        }
+
+
         if (collider.CompareTag("Tile"))
         {
             Tile tile = collider.gameObject.GetComponent<Tile>();
@@ -87,6 +109,13 @@ public class PlayerGroundCheck : MonoBehaviour
             return;
         }
 
+        Collider collider = collision.collider;
+        
+        if (collider.CompareTag("DistortionResetter") || collider.CompareTag("ClockItem"))
+        {
+            return;
+        }
+
         playerController.SetGroundedState(false);
     }
 
@@ -97,6 +126,11 @@ public class PlayerGroundCheck : MonoBehaviour
         }
 
         Collider collider = collision.collider;
+
+        if (collider.CompareTag("DistortionResetter") || collider.CompareTag("ClockItem"))
+        {
+            return;
+        }
 
         if (collider.CompareTag("Tile"))
         {
