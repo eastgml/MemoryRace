@@ -51,6 +51,13 @@ public class PlayerController : MonoBehaviour
         tileCheckerShot = false;
         shaderCoolTime = 15f;
         cam.GetComponent<Shader>().enabled = false;
+
+        // turn off tracker for me only, so other player can still see it
+        GameObject trackerObject = gameObject.transform.GetChild(0).gameObject;
+        if (trackerObject.GetComponent<PhotonView>().IsMine) 
+        { 
+            Destroy(trackerObject); 
+        }
     }
 
     float coolTime;
