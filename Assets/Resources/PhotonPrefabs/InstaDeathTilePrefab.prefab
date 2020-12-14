@@ -121,7 +121,7 @@ MonoBehaviour:
   blink: 0
   blinkTimer: 0
   blinkPeriod: 0
-  badTileMat: {fileID: 2100000, guid: 9390177c600caca42ad00bf024d1a4b7, type: 2}
+  badTileMat: {fileID: 2100000, guid: 3b44c6e35d22e5b49b238c86fa8b0de1, type: 2}
   originalMat: {fileID: 2100000, guid: 387930143d416c745b6a8c217394d1d4, type: 2}
   hoverMat: {fileID: 2100000, guid: 9390177c600caca42ad00bf024d1a4b7, type: 2}
   clockItemMat: {fileID: 2100000, guid: 7df78a1b90f8ea747ba67db19ce50a52, type: 2}

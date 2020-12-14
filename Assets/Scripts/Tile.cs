@@ -146,6 +146,7 @@ public class Tile : MonoBehaviour, IPunObservable
                 blinkTimer = blinkPeriod;
                 blink = true;
                 isRegenerating = true;
+                PV.RPC("revertMat", RpcTarget.All);
             }
 
             // tile has finishsed waiting to regenerate, so it reappears
@@ -172,18 +173,33 @@ public class Tile : MonoBehaviour, IPunObservable
         {
             isMelting = true;
             regenTimer = 3.0f;
+            PV.RPC("changeMatBad", RpcTarget.All);
         }
     }
 
     [PunRPC]
-    public void changeMat() {
+    public void changeMatBad()
+    {
+        mesh.GetComponent<MeshRenderer>().material = badTileMat;
+    }
+
+    [PunRPC]
+    public void changeMat()
+    {
         mesh.GetComponent<MeshRenderer>().material = hoverMat;
     }
 
     [PunRPC]
     public void revertMat()
     {
-        mesh.GetComponent<MeshRenderer>().material = originalMat;
+        if (!marked)
+        {
+            mesh.GetComponent<MeshRenderer>().material = originalMat;
+        }
+        else
+        {
+            mesh.GetComponent<MeshRenderer>().material = hoverMat;
+        }
     }
 
     public void OnMouseOver()
@@ -206,7 +222,7 @@ public class Tile : MonoBehaviour, IPunObservable
     [PunRPC]
     public void OnClockItemUsed()
     {
-        AudioSource.PlayClipAtPoint(clockSound, gameObject.transform.position, 2f);
+        AudioSource.PlayClipAtPoint(clockSound, gameObject.transform.position, 3f);
         clockItemGlowTimer = 0.5f;
         isGlowing = true;
         mesh.GetComponent<MeshRenderer>().material = clockItemMat;
