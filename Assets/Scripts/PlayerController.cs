@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject cameraHolder;
     [SerializeField] float mouseSensitivity, sprintSpeed, walkSpeed, jumpForce, smoothTime;
     Rigidbody rb;
-    PhotonView PV;
+    public PhotonView PV;
     float verticalLookRotation;
     bool grounded;
     Vector3 smoothMoveVelocity;
@@ -266,7 +266,17 @@ public class PlayerController : MonoBehaviour
                         hit.collider.GetComponent<Tile>().markedByMe = true;
                         PhotonView photonView = hit.collider.GetComponent<PhotonView>();
                         photonView.RPC("setMarked", RpcTarget.All, true);
-                        photonView.RPC("changeMat", RpcTarget.All);
+
+                        // if player 1, use marker material 1, if player 2 use material 2
+                        if (PV.Owner.IsMasterClient)
+                        {
+                            photonView.RPC("changeMat", RpcTarget.All, true);
+                        }
+                        else
+                        {
+                            photonView.RPC("changeMat", RpcTarget.All, false);
+                        }
+                        
                         //hit.collider.GetComponent<Tile>().changeMat();
                     }
                     else if (hit.collider.GetComponent<Tile>().markedByMe)
