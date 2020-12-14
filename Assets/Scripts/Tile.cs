@@ -19,6 +19,7 @@ public class Tile : MonoBehaviour, IPunObservable
     private float regenTimer; // after melting, time before it regenerates
     public bool isRegenerating; // true if tile is currently waiting to reappear
     public bool marked;
+    public bool markedByMe = false;
     public float clockItemGlowPeriod; // time it glows for
     public float clockItemGlowTimer; // timer that tracks how far tile is in glow period. Starts at 0, counts up until glowPeriod
     public bool isGlowing; // tile is currently glowing to show clock item was used
@@ -175,6 +176,12 @@ public class Tile : MonoBehaviour, IPunObservable
             regenTimer = 3.0f;
             PV.RPC("changeMatBad", RpcTarget.All);
         }
+    }
+
+    [PunRPC]
+    public void setMarked(bool isMarked)
+    {
+        marked = isMarked;
     }
 
     [PunRPC]

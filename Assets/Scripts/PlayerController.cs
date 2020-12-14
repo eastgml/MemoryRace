@@ -262,15 +262,20 @@ public class PlayerController : MonoBehaviour
                     if (!hit.collider.GetComponent<Tile>().marked && numPublicMarkers > 0)
                     {
                         numPublicMarkers -= 1;
-                        hit.collider.GetComponent<Tile>().marked = true;
+                        //hit.collider.GetComponent<Tile>().marked = true;
+                        hit.collider.GetComponent<Tile>().markedByMe = true;
                         PhotonView photonView = hit.collider.GetComponent<PhotonView>();
+                        photonView.RPC("setMarked", RpcTarget.All, true);
                         photonView.RPC("changeMat", RpcTarget.All);
                         //hit.collider.GetComponent<Tile>().changeMat();
                     }
-                    else {
+                    else if (hit.collider.GetComponent<Tile>().markedByMe)
+                    {
                         numPublicMarkers += 1;
-                        hit.collider.GetComponent<Tile>().marked = false;
+                        //hit.collider.GetComponent<Tile>().marked = false;
+                        hit.collider.GetComponent<Tile>().markedByMe = false;
                         PhotonView photonView = hit.collider.GetComponent<PhotonView>();
+                        photonView.RPC("setMarked", RpcTarget.All, false);
                         photonView.RPC("revertMat", RpcTarget.All);
                         //hit.collider.GetComponent<Tile>().revertMat();
                     }
