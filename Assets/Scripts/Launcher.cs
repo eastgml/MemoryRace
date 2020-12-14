@@ -114,6 +114,10 @@ public class Launcher : MonoBehaviourPunCallbacks
         }
     }
 
+    public void QuitGame() {
+        Application.Quit();
+    }
+
     public override void OnPlayerEnteredRoom(Player newPlayer) {
         Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(newPlayer);
     }

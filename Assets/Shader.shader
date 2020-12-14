@@ -26,15 +26,15 @@ Shader "Drunk"
 			{
 				vector <float,2> uv = vertex.xy / _ScreenParams.xy;
 				uv.y = 1.0 - uv.y;
-				uv.x += cos(uv.y * 2.0 + _Time.g) * 0.02;
-				uv.y += sin(uv.x * 2.0 + _Time.g) * 0.02;
+				uv.x += cos(uv.y * 2.0 + _Time.g) * 0.01;
+				uv.y += sin(uv.x * 2.0 + _Time.g) * 0.01;
 				float offset = sin(_Time.g * 0.5) * 0.01;
 				float4 a = tex2D(_MainTex,uv);
 				float4 b = tex2D(_MainTex,uv - float2(sin(offset),0.0));
 				float4 c = tex2D(_MainTex,uv + float2(sin(offset),0.0));
 				float4 d = tex2D(_MainTex,uv - float2(0.0,sin(offset)));
 				float4 e = tex2D(_MainTex,uv + float2(0.0,sin(offset)));
-				return (a + b + c + d + e) / 5.0;
+				return (a + b + c + d + e) / 5;
 			}
 			ENDCG
 		}

@@ -118,6 +118,10 @@ public class PlayerController : MonoBehaviour
                 transform.position = new Vector3(15, 0, 0);
             }
         }
+
+        if (transform.position.y < 0) {
+            grounded = false;
+        }
     }
 
     public float turnSmoothTime = 0.1f;
@@ -145,6 +149,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
+            grounded = false;
             rb.AddForce(transform.up * jumpForce);
         }
     }
@@ -412,7 +417,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
         clockItemText.text = "Clock Items: " + numClockItems;
-        publicMarkerText.text = "Public Markers: " + numPublicMarkers;
+        publicMarkerText.text = "Markers: " + numPublicMarkers;
         tileCheckerText.text = "Tile Checkers: " + numTileCheckers;
     }
 
