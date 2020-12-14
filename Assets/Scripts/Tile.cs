@@ -31,6 +31,9 @@ public class Tile : MonoBehaviour, IPunObservable
     public Material badTileMat; // just for testing purposes
     public Material originalMat; // just for testing purposes
     public Material hoverMat;
+    public Material markerMat1;
+    public Material markerMat2;
+    public Material currentMarkerMat; // markerMat1 if currently marked by player 1, markerMat2 if currently marked by player 2
     public Material clockItemMat;
     
     // Start is called before the first frame update
@@ -191,9 +194,18 @@ public class Tile : MonoBehaviour, IPunObservable
     }
 
     [PunRPC]
-    public void changeMat()
+    public void changeMat(bool p1)
     {
-        mesh.GetComponent<MeshRenderer>().material = hoverMat;
+        if (p1)
+        {
+            mesh.GetComponent<MeshRenderer>().material = markerMat1;
+            currentMarkerMat = markerMat1;
+        }
+        else
+        {
+            mesh.GetComponent<MeshRenderer>().material = markerMat2;
+            currentMarkerMat = markerMat2;
+        }
     }
 
     [PunRPC]
@@ -205,7 +217,8 @@ public class Tile : MonoBehaviour, IPunObservable
         }
         else
         {
-            mesh.GetComponent<MeshRenderer>().material = hoverMat;
+            //mesh.GetComponent<MeshRenderer>().material = hoverMat;
+            mesh.GetComponent<MeshRenderer>().material = currentMarkerMat;
         }
     }
 
@@ -221,6 +234,10 @@ public class Tile : MonoBehaviour, IPunObservable
     {
         if (!marked && !isGlowing) {
             mesh.GetComponent<MeshRenderer>().material = originalMat;
+        }
+        else if (marked)
+        {
+            mesh.GetComponent<MeshRenderer>().material = currentMarkerMat;
         }
     }
 
