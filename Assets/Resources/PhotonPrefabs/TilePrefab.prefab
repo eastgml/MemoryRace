@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6ebf5d4d8a12c4b468ae22de4bd14f7a, type: 2}
+  - {fileID: 2100000, guid: fef17494068f4314db3e3d32725d35f6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -121,7 +121,7 @@ MonoBehaviour:
   blink: 0
   blinkTimer: 0
   blinkPeriod: 0
-  badTileMat: {fileID: 2100000, guid: 9390177c600caca42ad00bf024d1a4b7, type: 2}
+  badTileMat: {fileID: 2100000, guid: 3b44c6e35d22e5b49b238c86fa8b0de1, type: 2}
   originalMat: {fileID: 2100000, guid: 6ebf5d4d8a12c4b468ae22de4bd14f7a, type: 2}
   hoverMat: {fileID: 2100000, guid: 9390177c600caca42ad00bf024d1a4b7, type: 2}
   clockItemMat: {fileID: 2100000, guid: 7df78a1b90f8ea747ba67db19ce50a52, type: 2}
