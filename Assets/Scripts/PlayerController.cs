@@ -416,9 +416,9 @@ public class PlayerController : MonoBehaviour
             tileCheckerText.text = "";
             return;
         }
-        clockItemText.text = "Clock Items: " + numClockItems;
-        publicMarkerText.text = "Markers: " + numPublicMarkers;
-        tileCheckerText.text = "Tile Checkers: " + numTileCheckers;
+        clockItemText.text = numClockItems.ToString();
+        publicMarkerText.text = numPublicMarkers.ToString();
+        tileCheckerText.text = numTileCheckers.ToString();
     }
 
     public GameObject FindClosestTile()
