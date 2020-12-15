@@ -46,14 +46,16 @@ public class Tile : MonoBehaviour, IPunObservable
         }
 
         // randomize which tile model out of 2      
-        if (Random.Range(0, 1f) < 0.5)
+        /*if (Random.Range(0, 1f) < 0.5)
         {
             PV.RPC("changeMesh", RpcTarget.All, true);
         }
         else
         {
             PV.RPC("changeMesh", RpcTarget.All, false);
-        }
+        }*/
+
+        PV.RPC("changeMesh", RpcTarget.All, false);
 
         object[] tileTypeData = PV.InstantiationData;
         if ((bool)tileTypeData[0])
