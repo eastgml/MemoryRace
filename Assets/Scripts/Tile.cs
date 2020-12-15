@@ -5,7 +5,7 @@ using Photon.Pun;
 
 public class Tile : MonoBehaviour, IPunObservable
 {
-    PhotonView PV;
+    public PhotonView PV;
 
     public MeshRenderer mesh;
 
@@ -43,6 +43,16 @@ public class Tile : MonoBehaviour, IPunObservable
         if (!PV.IsMine)
         {
             return;
+        }
+
+        // randomize which tile model out of 2      
+        if (Random.Range(0, 1f) < 0.5)
+        {
+            PV.RPC("changeMesh", RpcTarget.All, true);
+        }
+        else
+        {
+            PV.RPC("changeMesh", RpcTarget.All, false);
         }
 
         object[] tileTypeData = PV.InstantiationData;
@@ -260,6 +270,21 @@ public class Tile : MonoBehaviour, IPunObservable
         meltPeriod = meltTime;
         isInstaDeath = isInsta;
         meltTimer = meltPeriod;
+    }
+
+    [PunRPC] 
+    private void changeMesh(bool mesh1)
+    {
+        if (mesh1)
+        {
+            gameObject.transform.GetChild(1).gameObject.GetComponent<MeshRenderer>().enabled = false;
+        }
+        else
+        {
+            gameObject.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().enabled = false;
+            mesh = gameObject.transform.GetChild(1).gameObject.GetComponent<MeshRenderer>();
+            mesh.enabled = true;
+        }
     }
 
     [PunRPC]

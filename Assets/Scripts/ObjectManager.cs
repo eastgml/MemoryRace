@@ -38,7 +38,36 @@ public class ObjectManager : MonoBehaviour
             int maxDistortionResetters = 2;
             for (int j = 0; j < tilesPerRow; j++)
             {
-                GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "TilePrefab"), new Vector3(j * 5, 0, i * 5 + 8), Quaternion.identity, 0, defaultTileData);
+                // randomize how tile is rotated
+                float xRot, yRot, zRot;
+                if (Random.Range(0, 1f) < 0.5f)
+                {
+                    xRot = 0f;
+                }
+                else
+                {
+                    xRot = 180f;
+                }
+                if (Random.Range(0, 1f) < 0.5f)
+                {
+                    yRot = 0f;
+                }
+                else
+                {
+                    yRot = 180f;
+                }
+                if (Random.Range(0, 1f) < 0.5f)
+                {
+                    zRot = 0f;
+                }
+                else
+                {
+                    zRot = 180f;
+                }
+
+                GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "TilePrefab1"), new Vector3(j * 5, 0, i * 5 + 8), Quaternion.Euler(xRot, yRot, zRot), 0, defaultTileData);
+
+                // randomize whether tile is bad or not
                 if (Random.Range(0, 1f) < 0.4)
                 {
                     go.GetComponent<Tile>().isBad = true;
@@ -76,7 +105,36 @@ public class ObjectManager : MonoBehaviour
 
             for (int j = 0; j < tilesPerRow; j++)
             {
-                GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "InstaDeathTilePrefab"), new Vector3(j * 5, 0, i * 5 + 8), Quaternion.identity, 0, deathTileData);
+                // randomize how tile is rotated
+                float xRot, yRot, zRot;
+                if (Random.Range(0, 1f) < 0.5f)
+                {
+                    xRot = 0f;
+                }
+                else
+                {
+                    xRot = 180f;
+                }
+                if (Random.Range(0, 1f) < 0.5f)
+                {
+                    yRot = 0f;
+                }
+                else
+                {
+                    yRot = 180f;
+                }
+                if (Random.Range(0, 1f) < 0.5f)
+                {
+                    zRot = 0f;
+                }
+                else
+                {
+                    zRot = 180f;
+                }
+
+                GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "InstaDeathTilePrefab2"), new Vector3(j * 5, 0, i * 5 + 8), Quaternion.Euler(xRot, yRot, zRot), 0, deathTileData);
+
+                // randomize whether tile is bad or not
                 if (Random.Range(0, 1f) < 0.4 && maxBadTileCnt > 0)
                 {
                     go.GetComponent<Tile>().isBad = true;
@@ -111,7 +169,36 @@ public class ObjectManager : MonoBehaviour
 
             for (int j = 0; j < tilesPerRow; j++)
             {
-                GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "TilePrefab"), new Vector3(j * 5, 0, i * 5 + 8), Quaternion.identity, 0, defaultTileData);
+                // randomize how tile is rotated
+                float xRot, yRot, zRot;
+                if (Random.Range(0, 1f) < 0.5f)
+                {
+                    xRot = 0f;
+                }
+                else
+                {
+                    xRot = 180f;
+                }
+                if (Random.Range(0, 1f) < 0.5f)
+                {
+                    yRot = 0f;
+                }
+                else
+                {
+                    yRot = 180f;
+                }
+                if (Random.Range(0, 1f) < 0.5f)
+                {
+                    zRot = 0f;
+                }
+                else
+                {
+                    zRot = 180f;
+                }
+
+                GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "TilePrefab1"), new Vector3(j * 5, 0, i * 5 + 8), Quaternion.Euler(xRot, yRot, zRot), 0, defaultTileData);
+
+                // randomize whether tile is bad or not
                 if (Random.Range(0, 1f) < 0.4)
                 {
                     go.GetComponent<Tile>().isBad = true;
