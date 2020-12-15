@@ -132,7 +132,7 @@ public class ObjectManager : MonoBehaviour
                     zRot = 180f;
                 }
 
-                GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "InstaDeathTilePrefab2"), new Vector3(j * 5, 0, i * 5 + 8), Quaternion.Euler(xRot, yRot, zRot), 0, deathTileData);
+                GameObject go = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "InstaDeathTilePrefab1"), new Vector3(j * 5, 0, i * 5 + 8), Quaternion.Euler(xRot, yRot, zRot), 0, deathTileData);
 
                 // randomize whether tile is bad or not
                 if (Random.Range(0, 1f) < 0.4 && maxBadTileCnt > 0)
